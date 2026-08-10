@@ -399,3 +399,11 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# ==========================================
+# MonoGame Content Pipeline Cache
+# ==========================================
+# Blocks the MGCB asset builder's local scratch folder
+
+.mgbld/
+
