@@ -8,15 +8,13 @@ using System.Diagnostics;
 
 namespace old_heart
 {
-    public abstract class entity : node ,ICollisionActor
+    public abstract class entity : node
     {
         public ContentManager content;
         public Texture2D texture;
-        public int Id => GetHashCode(); // for collision // id of entity is it's unique hash code   
-        public BoundingCircle2D hitbox; // for collision
-        public CollisionShape2D Shape { get; set; }// for collision
+        public collision_shape collision;
 
-        public int hit_box_radius = 15; // for collision // hit_box is circle (BoundingCircle2D)
+        public float hit_box_radius = 15; // for collision // hit_box is circle (BoundingCircle2D)
         public Vector2 sprite_origin;
 
         public Vector2 position = new Vector2(0, 0);
@@ -36,7 +34,8 @@ namespace old_heart
             this.hp = max_hp;
             this.position = position;
             this.speed = speed;
-            Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));
+            this.collision = new collision_shape_circle(new BoundingCircle2D(position, hit_box_radius));
+            collision.owner = this;
             texture = content.Load<Texture2D>("image/player");
             sprite_origin = new Vector2((texture.Width / 2), texture.Height); // origin position is center X and bottom Y
         }
@@ -52,8 +51,9 @@ namespace old_heart
             }
 
             velocity += acceleration * delta_time; 
-            position += velocity * delta_time; // add collision later
-            Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));  // update hit box position
+            position += velocity * delta_time;
+
+            collision.Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));  // update collision position
         }
         public void die()
         {
@@ -72,14 +72,12 @@ namespace old_heart
         }
         public void collide_wall(CollisionPair2D pair , float delta_time) // wall collision get call from collision_manager
         {
-            Debug.WriteLine("p collide");
             velocity += pair.FirstResult.MinimumTranslationVector / delta_time; // devided by delta_time for wall to push instantly
         }
         public override void Draw(SpriteBatch sprite_batch)
         {
-            Vector2 sprite_origin = new Vector2((texture.Width / 2), texture.Height); // origin position is center X and bottom Y
-            float layerDepth = (position.Y + 50000f) / 100000f;
-            sprite_batch.Draw(texture, position,null,Color.White,0, sprite_origin, 1,SpriteEffects.None, layerDepth);
+            float layer_depth = (position.Y + 50000f) / 100000f;
+            sprite_batch.Draw(texture, position,null,Color.White,0, sprite_origin, 1,SpriteEffects.None, layer_depth);
         }
     }
 }

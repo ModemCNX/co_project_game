@@ -60,9 +60,16 @@ namespace old_heart
             var collisionPairs = collision_world.QueryCollisionPairs(layer_that_collide_with_wall, "wall"); // when collision between default and wall layer happen
             foreach (var pair in collisionPairs)
             {
-                if (pair.First is entity entity) // if any entity in default collision layer hit wall layer
+                if (pair.First is collision_shape collision_shape) // if any entity in default collision layer hit wall layer
                 {
-                    entity.collide_wall(pair, delta_time);
+                    if (collision_shape.owner is entity entity)
+                    {
+                        entity.collide_wall(pair, delta_time);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("collision_shape.owner is not entity : " + collision_shape);
+                    }
                 }
                 //Debug.WriteLine(pair.First.GetType().Name);
             }

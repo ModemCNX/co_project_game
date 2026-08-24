@@ -8,16 +8,17 @@ using System.Diagnostics;
 
 namespace old_heart
 {
-    public abstract class projectile : node ,ICollisionActor
+    public abstract class projectile : node 
     {
         public ContentManager content;
         public Texture2D texture;
-        public int Id => GetHashCode(); // for collision // id of projectile is it's unique hash code   
-        public BoundingCircle2D hitbox; // for collision
-        public string collision_layer_name;  // for collision
-        public CollisionShape2D Shape { get; set; }// for collision
 
-        public int hit_box_radius = 10; // for collision
+        public collision_shape collision;
+
+        public float hit_box_radius = 15; // for collision // hit_box is circle (BoundingCircle2D)
+        public Vector2 sprite_origin;
+
+        public float rotation = 0;
 
         public Vector2 position = new Vector2(0, 0);
         public Vector2 velocity = new Vector2(0,0);
@@ -33,12 +34,25 @@ namespace old_heart
             content = content_set;
             this.time_left = time_left;
             this.position = position;
-            Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));
+            collision.Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));
+            sprite_origin = new Vector2((texture.Width / 2), (texture.Height / 2)); // position is center X and center Y
         }
         public override void Update(GameTime gameTime)
         {
-            if (alive == false) return;
             float delta_time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (alive)
+            {
+                time_left -= delta_time;
+                if (time_left <= 0)
+                {
+                    time_out();
+                }
+            }
+            else
+            {
+                return;
+            }
+            
 
             velocity -= velocity * ground_friction * delta_time;
             if (velocity.Length() > max_velocity)
@@ -46,9 +60,10 @@ namespace old_heart
                 velocity = Vector2.Normalize(velocity) * max_velocity;
             }
 
-            velocity += acceleration * delta_time; 
-            position += velocity * delta_time; // add collision later
-            Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));  // update hit box position
+            velocity += acceleration * delta_time;
+            position += velocity * delta_time;
+
+            collision.Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));  // update collision position
         }
         public void time_out()
         {
@@ -63,9 +78,8 @@ namespace old_heart
         }
         public override void Draw(SpriteBatch sprite_batch)
         {
-            Vector2 texture_origin = new Vector2((texture.Width / 2), texture.Height); // position is center X and bottom Y
-            float layerDepth = (position.Y + 50000f) / 100000f;
-            sprite_batch.Draw(texture, position,null,Color.White,0, texture_origin,1,SpriteEffects.None, layerDepth);
+            float layer_depth = (position.Y + 50000f) / 100000f;
+            sprite_batch.Draw(texture, position,null,Color.White,rotation, sprite_origin, 1,SpriteEffects.None, layer_depth);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace old_heart
 {
-    public class collision_shape_circle :collision_shape
+    public sealed class collision_shape_circle :collision_shape
     {
         public collision_shape_circle(BoundingCircle2D bounding_circle)
         {

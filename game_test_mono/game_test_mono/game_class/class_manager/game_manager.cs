@@ -18,8 +18,8 @@ namespace old_heart
         public entity_manager entity_manager;
         public camera_manager camera_manager;
         public particle_manager particle_manager;
-        public collision_manager collision_manager;
         public projectile_manager projectile_manager;
+        public collision_manager collision_manager;
 
         public debug_manager debug_manager;
 
@@ -36,8 +36,8 @@ namespace old_heart
             entity_manager = new entity_manager();
             camera_manager = new camera_manager(graphics_device);
             particle_manager = new particle_manager(content); 
-            collision_manager = new collision_manager();
             projectile_manager = new projectile_manager();
+            collision_manager = new collision_manager();
 
             debug_manager = new debug_manager();
         }
@@ -64,23 +64,24 @@ namespace old_heart
             if (entity is player player)
             {
                 this.player = player;
-                collision_manager.add(player, "player");
+                collision_manager.add(player.collision, "player");
             }
             else
             {
-                collision_manager.add(entity, "enemy");
+                collision_manager.add(entity.collision, "enemy");
             }
+            debug_manager.add(entity.collision);
         }
         public void add_projectile(projectile projectile,bool player_projectile = false)
         {
             projectile_manager.add(projectile);
             if (player_projectile)
             {
-                collision_manager.add(projectile, "player_hitbox");
+                collision_manager.add(projectile.collision, "player_hitbox");
             }
             else
             {
-                collision_manager.add(projectile, "enemy_hitbox");
+                collision_manager.add(projectile.collision, "enemy_hitbox");
             }
         }
         
@@ -93,7 +94,6 @@ namespace old_heart
             entity_manager.update(gameTime);
             particle_manager.update(gameTime);
             projectile_manager.update(gameTime);
-
             collision_manager.update(gameTime);
 
             debug_manager.update(gameTime);
@@ -118,7 +118,7 @@ namespace old_heart
                 foreach (entity entity in inactive_entity)
                 {
                     entity_manager.remove(entity);
-                    if (entity is ICollisionActor actor) {
+                    if (entity.collision is ICollisionActor actor) {
                         collision_manager.remove(actor); // remove it from collision manager 
                         Debug.WriteLine("game_manager test collision entity removed " + entity);
                     }
@@ -130,7 +130,7 @@ namespace old_heart
                 foreach (projectile projectile in inactive_projectile)
                 {
                     projectile_manager.remove(projectile);
-                    if (projectile is ICollisionActor actor)
+                    if (projectile.collision is ICollisionActor actor)
                     {
                         collision_manager.remove(actor); // remove it from collision manager 
                         Debug.WriteLine("game_manager test collision projectile removed " + projectile);

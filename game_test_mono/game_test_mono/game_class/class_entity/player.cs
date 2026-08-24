@@ -52,7 +52,6 @@ namespace old_heart
         public override void Draw(SpriteBatch sprite_batch)
         {
             base.Draw(sprite_batch);
-            sprite_batch.DrawCircle(new CircleF(new Vector2(position.X, position.Y),(float)hit_box_radius),16,Color.Red,5,0);
         }
     }
 }

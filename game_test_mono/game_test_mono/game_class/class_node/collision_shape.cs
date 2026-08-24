@@ -10,9 +10,10 @@ namespace old_heart
         public int Id => GetHashCode(); // for collision // id of entity is it's unique hash code
         public CollisionShape2D Shape { get; set;}
 
+        public node owner;
         public override void Update(GameTime gameTime)
         {
-
+            // dont update collision shape using this,       just update Shape when node that use collision update
         }
         public override void Draw(SpriteBatch sprite_batch) // for debug
         {
