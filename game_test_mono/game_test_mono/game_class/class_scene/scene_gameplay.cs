@@ -27,38 +27,29 @@ namespace old_heart
         public override void LoadContent()
         {
             base.LoadContent();
-            camera = new OrthographicCamera(GraphicsDevice);
-            camera.Zoom = 1;
 
             font = Content.Load<SpriteFont>("font/test_font");
 
             test_text = new ui_text("gameplay scene\nclick or V to go back to title bruh", font, new Vector2(100, 50),Color.DarkGreen);
-            ui_node_list.Add(test_text);
-            test_text2 = new ui_text("testttttttt text on floor to see if player actually move Chess Battle Advanced", font, new Vector2(256f, 600f), Color.DarkOrange);
-            world_node_list.Add(test_text2);
-            return_button = new ui_button(GraphicsDevice, new Rectangle(150, 600, 200, 100));
-            ui_node_list.Add(return_button);
+            game_manager.add_ui(test_text);
+            test_text2 = new ui_text("press P to view hitbox testttttttt  Chess Battle Advanced", font, new Vector2(256f, 600f), Color.DarkOrange);
+            game_manager.add_map(test_text2);
+            return_button = new ui_button(Content , new Rectangle(150, 600, 200, 100));
+            game_manager.add_ui(return_button);
 
-            player = new player(Content,new Vector2(200,100));
-            world_entity_list.Add(player);
-            collision_world.Insert(player);
+            player = new player(Content,new Vector2(200,200));
+            game_manager.add_entity(player);
 
-            wall_collision wall = new wall_collision(GraphicsDevice, BoundingBox2D.CreateFromPositionAndSize(new Vector2(1500f, 100f), new Vector2(64f, 500f)));
-            collision_world.Insert(wall, "wall");
-            world_node_list.Add(wall);
-            wall_collision wall2 = new wall_collision(GraphicsDevice, BoundingBox2D.CreateFromPositionAndSize(new Vector2(1100f, 500f), new Vector2(500f, 64f)));
-            collision_world.Insert(wall2, "wall");
-            world_node_list.Add(wall2);
-        }
-        public void debug_draw(SpriteBatch sprite_batch, CollisionWorld2D collision_world, string target_layer_name)
-        {
-            
+            collision_shape_box wall = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(500f, 100f), new Vector2(64f, 500f)));
+            game_manager.add_map_collision(wall);
+            collision_shape_box wall2 = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(100f, 500f), new Vector2(500f, 64f)));
+            game_manager.add_map_collision(wall2);
         }
         public override void Update(GameTime gameTime)
         {
-            update_node(gameTime);
+            update_all(gameTime);
 
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.V))
+            if (global.input.keyboard_state.WasKeyPressed(Keys.V))
             {
                 ScreenManager.ReplaceScreen(new main_menu(game_ref), fade_transition);
             }
@@ -68,9 +59,8 @@ namespace old_heart
             }
 
             test_text.text_string = $"gameplay scene\nclick or V to go back to title bruh\nplayer acc : {player.acceleration}\nvelocity : {player.velocity.X:F2} , {player.velocity.Y:F2}" +
-            $"\nw speed : {player.velocity.Length():F2}\nmouse_pos : {MouseExtended.GetState().Position}";
+            $"\nw speed : {player.velocity.Length():F2} \nposition : {player.position.X:F2} , {player.position.Y:F2} \nmouse_pos : {global.input.mouse_state.Position}";
 
-            camera.LookAt(player.position); // update camera
         }
         public void OnCollision()
         {

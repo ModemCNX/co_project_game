@@ -21,21 +21,22 @@ namespace old_heart
         public override void Update(GameTime gameTime)
         {
             if (alive == false) return;
+            KeyboardStateExtended keyboard_state = global.input.keyboard_state;
             input_direction = Vector2.Zero;
 
-            if (KeyboardExtended.GetState().IsKeyDown(Keys.D))
+            if (keyboard_state.IsKeyDown(Keys.D))
             {
                 input_direction += new Vector2(1,0);
             }
-            if (KeyboardExtended.GetState().IsKeyDown(Keys.A))
+            if (keyboard_state.IsKeyDown(Keys.A))
             {
                 input_direction += new Vector2(-1,0);
             }
-            if (KeyboardExtended.GetState().IsKeyDown(Keys.S))
+            if (keyboard_state.IsKeyDown(Keys.S))
             {
                 input_direction += new Vector2(0,1);
             }
-            if (KeyboardExtended.GetState().IsKeyDown(Keys.W))
+            if (keyboard_state.IsKeyDown(Keys.W))
             {
                 input_direction += new Vector2(0,-1);
             }
@@ -51,7 +52,7 @@ namespace old_heart
         public override void Draw(SpriteBatch sprite_batch)
         {
             base.Draw(sprite_batch);
-            sprite_batch.DrawCircle(new CircleF(new Vector2(position.X, position.Y), 10), 16, Color.White, 5);
+            sprite_batch.DrawCircle(new CircleF(new Vector2(position.X, position.Y),(float)hit_box_radius),16,Color.Red,5,0);
         }
     }
 }

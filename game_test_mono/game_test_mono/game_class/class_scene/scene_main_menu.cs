@@ -23,17 +23,17 @@ namespace old_heart
             font = Content.Load<SpriteFont>("font/test_font");
 
             test_text = new ui_text("Chess Battle Advanced\nclick or V to play\nEsc to quit", font, new Vector2(100, 50));
-            ui_node_list.Add(test_text);
-            start_button = new ui_button(GraphicsDevice, new Rectangle(150, 500, 200, 100));
-            ui_node_list.Add(start_button);
+            game_manager.add_ui(test_text);
+            start_button = new ui_button(Content, new Rectangle(150, 500, 200, 100));
+            game_manager.add_ui(start_button);
 
 
         }
 
         public override void Update(GameTime gameTime)
         {
-            update_node(gameTime);
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.V))
+            update_all(gameTime);
+            if (global.input.keyboard_state.WasKeyPressed(Keys.V))
             {
                 ScreenManager.ReplaceScreen(new gameplay(game_ref), fade_transition);
             }

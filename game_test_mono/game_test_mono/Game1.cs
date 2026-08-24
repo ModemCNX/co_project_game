@@ -52,7 +52,9 @@ namespace old_heart
             KeyboardExtended.Update(); // update keyboard input 
             MouseExtended.Update(); // update mouse input 
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            global.input.update_input_state();
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || global.input.keyboard_state.IsKeyDown(Keys.Escape))
                 Exit();
 
             base.Update(gameTime);

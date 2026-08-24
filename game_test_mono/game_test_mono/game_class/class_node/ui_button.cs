@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Input;
 
@@ -14,20 +15,20 @@ namespace old_heart
         Color hold_color = Color.Black;
         public bool clicked = false;
 
-        public ui_button(GraphicsDevice graphics_device ,Rectangle rect)
+        public ui_button(ContentManager content ,Rectangle rect)
         {
             button_rect = rect;
 
-            button_texture = new Texture2D(graphics_device, 1, 1);
-            //  Set the single pixel's data to pure white
-            button_texture.SetData(new[] { Color.White });
+            button_texture = content.Load<Texture2D>("image/white_pixel");
         }
 
         public override void Update(GameTime gameTime)
         {
-            MouseStateExtended mouse_state = MouseExtended.GetState();
+            if (!visible) return; // make it not work when it is invisible
 
-            bool mouse_hover = button_rect.Contains(new Point(mouse_state.Position.X, mouse_state.Position.Y));
+            MouseStateExtended mouse_state = global.input.mouse_state;
+
+            bool mouse_hover = button_rect.Contains(mouse_state.Position);
             clicked = false; // reset clicked every frame
 
             if (mouse_hover) // mouse inside button rect
