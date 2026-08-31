@@ -2,11 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Collisions;
-using MonoGame.Extended.Collisions.Layers;
-using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
-using System.Diagnostics;
 
 namespace old_heart
 {
@@ -59,7 +55,8 @@ namespace old_heart
             }
 
             test_text.text_string = $"gameplay scene\nclick or V to go back to title bruh\nplayer acc : {player.acceleration}\nvelocity : {player.velocity.X:F2} , {player.velocity.Y:F2}" +
-            $"\nw speed : {player.velocity.Length():F2} \nposition : {player.position.X:F2} , {player.position.Y:F2} \nmouse_pos : {global.input.mouse_state.Position}";
+            $"\nw speed : {player.velocity.Length():F2} \nposition : {player.position.X:F2} , {player.position.Y:F2} \nmouse_pos : {global.input.mouse_state.Position}" +
+            $"\nplayer animation : {player.animation_player.current_animation.name} [{player.animation_player.current_frame_index}]";
 
         }
         public void OnCollision()

@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
-using MonoGame.Extended.Screens.Transitions;
-using System.Diagnostics;
 
 namespace old_heart
 {
@@ -44,14 +43,10 @@ namespace old_heart
         protected override void LoadContent()
         {
             sprite_batch = new SpriteBatch(GraphicsDevice);
-
         }
 
         protected override void Update(GameTime gameTime)
         {
-            KeyboardExtended.Update(); // update keyboard input 
-            MouseExtended.Update(); // update mouse input 
-
             global.input.update_input_state();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || global.input.keyboard_state.IsKeyDown(Keys.Escape))

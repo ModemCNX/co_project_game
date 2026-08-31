@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
-using MonoGame.Extended.Particles.Data;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -142,23 +140,23 @@ namespace old_heart
         {
             Matrix camera_matrix = camera_manager.camera.GetViewMatrix();
 
-            sprite_batch.Begin(transformMatrix: camera_matrix);
+            sprite_batch.Begin(samplerState: SamplerState.PointClamp , transformMatrix: camera_matrix);
             map_manager.draw_low(sprite_batch);
             particle_manager.draw_low(sprite_batch);
             sprite_batch.End();
 
-            sprite_batch.Begin(sortMode: SpriteSortMode.FrontToBack, transformMatrix: camera_matrix);
+            sprite_batch.Begin(samplerState: SamplerState.PointClamp , sortMode: SpriteSortMode.FrontToBack, transformMatrix: camera_matrix);
             entity_manager.draw(sprite_batch);
             projectile_manager.draw(sprite_batch);
             sprite_batch.End();
 
-            sprite_batch.Begin(transformMatrix: camera_matrix);
+            sprite_batch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: camera_matrix);
             particle_manager.draw_high(sprite_batch);
             map_manager.draw_high(sprite_batch);
             debug_manager.draw(sprite_batch); // debug 
             sprite_batch.End();
 
-            sprite_batch.Begin();
+            sprite_batch.Begin(samplerState: SamplerState.PointClamp );
             ui_manager.draw(sprite_batch);
             sprite_batch.End();
 
