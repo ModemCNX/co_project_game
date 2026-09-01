@@ -27,8 +27,9 @@ namespace old_heart
             if (!visible) return; // make it not work when it is invisible
 
             MouseStateExtended mouse_state = global.input.mouse_state;
+            Point mouse_position = global.input.scaled_mouse_position;
+            bool mouse_hover = button_rect.Contains(mouse_position);
 
-            bool mouse_hover = button_rect.Contains(mouse_state.Position);
             clicked = false; // reset clicked every frame
 
             if (mouse_hover) // mouse inside button rect

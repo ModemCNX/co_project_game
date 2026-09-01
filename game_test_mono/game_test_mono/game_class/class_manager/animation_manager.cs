@@ -21,7 +21,7 @@ namespace old_heart
         public string name; // for debug only 
         public Texture2D sprite_sheet;
         public Point sprite_size = new Point(32,32);
-        public Vector2 sprite_scale = new Vector2(4,4);
+        public Vector2 sprite_scale = new Vector2(2,2);
         public bool loop = true;
         public int frame_count = 1;
         public float frame_time = 0.166f;

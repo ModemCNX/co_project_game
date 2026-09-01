@@ -25,7 +25,7 @@ namespace old_heart
         public override void LoadContent()
         {
             fade_transition = new FadeTransition(game_ref.GraphicsDevice, Color.Black, 0.5f); // setup transition screen for all inheried scene to use
-            game_manager = new game_manager(Content, GraphicsDevice);
+            game_manager = new game_manager(Content, game_ref.Window, GraphicsDevice);
         }
 
         public void update_all(GameTime gameTime)
@@ -34,12 +34,14 @@ namespace old_heart
         }
         public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black); // black border   outside viewport
+
             game_manager.draw(sprite_batch);
         }
         public override void UnloadContent()
         {
             // call unscribe function of the game manager
+            game_manager.unload();
         }
     }
 }

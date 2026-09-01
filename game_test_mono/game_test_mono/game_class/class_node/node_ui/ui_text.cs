@@ -9,6 +9,7 @@ namespace old_heart
         public Color text_color = Color.Black;
         public Vector2 text_position;
         public string text_string;
+        public Vector2 text_scale = new Vector2(1f,1f);
 
         public bool clicked = false;
 
@@ -19,13 +20,6 @@ namespace old_heart
             text_font.Spacing = 1f;
             text_position = position;
         }
-        public ui_text(string text_string_set, SpriteFont font, Vector2 position,Color color)
-        {
-            text_string = text_string_set;
-            text_font = font;
-            text_position = position;
-            text_color = color;
-        }
 
         public override void Update(GameTime gameTime)
         {
@@ -34,7 +28,7 @@ namespace old_heart
 
         public override void Draw(SpriteBatch sprite_batch)
         {
-            sprite_batch.DrawString(text_font,text_string, text_position, text_color);
+            sprite_batch.DrawString(text_font,text_string, text_position, text_color,0,Vector2.Zero,text_scale,SpriteEffects.None,1);
         }
 
     }

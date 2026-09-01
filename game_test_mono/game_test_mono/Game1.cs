@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
+using System.Diagnostics;
 
 namespace old_heart
 {
@@ -13,18 +14,20 @@ namespace old_heart
         public SpriteBatch sprite_batch;
 
         readonly ScreenManager screen_manager;
-        int eee = 100;
+        int eee = 1;
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = 1920;
-            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.PreferredBackBufferWidth = 960;
+            _graphics.PreferredBackBufferHeight = 540;
             _graphics.HardwareModeSwitch = false; // _graphics.HardwareModeSwitch = false     to enable alt tap in full screen
             _graphics.ApplyChanges();
-            _graphics.ToggleFullScreen();
+            //_graphics.ToggleFullScreen();
 
             Window.Title = "Chess Battle Advanced" ;
+            Window.AllowUserResizing = true;
+
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             
@@ -48,7 +51,7 @@ namespace old_heart
         protected override void Update(GameTime gameTime)
         {
             global.input.update_input_state();
-
+            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || global.input.keyboard_state.IsKeyDown(Keys.Escape))
                 Exit();
 

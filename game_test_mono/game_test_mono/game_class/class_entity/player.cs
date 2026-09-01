@@ -12,13 +12,12 @@ namespace old_heart
         public Vector2 input_direction = Vector2.Zero;
         public enum state { idle , walk}
         public state current_state = state.idle;
-        //private camera_manager camManage; //Camera test
+
         public player(ContentManager content, Vector2 position) : base(content, max_hp:4, position, speed:5000)
         {
             animation_player = new animation_player_player(content);
             ground_friction = 10f;
             max_velocity = 400;
-
 
         }
         public override void Update(GameTime gameTime)
@@ -45,11 +44,6 @@ namespace old_heart
                 input_direction += new Vector2(0,-1);
             }
 
-           // if (keyboard_state.IsKeyDown(Keys.E)) //camera shake Test
-            //{
-             //   camManage.shake_screen(0.5f); 
-            //}
-
             if (input_direction != Vector2.Zero)
             {
                 input_direction = Vector2.Normalize(input_direction) * speed;
@@ -65,8 +59,14 @@ namespace old_heart
             {
                 current_state = state.idle;
             }
-            
-                base.Update(gameTime);
+
+            if (keyboard_state.WasKeyPressed(Keys.F))
+            {
+                take_damage(1);
+                Debug.WriteLine("hp left " + hp + " / " + max_hp);
+            }
+
+            base.Update(gameTime);
         }
         public override void update_animation(float delta_time)
         {
@@ -79,8 +79,7 @@ namespace old_heart
                 animation_player.play(animation_player.default_animation);
             }
 
-
-            animation_player.update(delta_time, current_direction.ToString());
+            base.update_animation(delta_time);
         }
         public override void Draw(SpriteBatch sprite_batch)
         {

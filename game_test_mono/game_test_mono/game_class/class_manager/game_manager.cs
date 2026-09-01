@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,12 +28,12 @@ namespace old_heart
         public bool game_over = false;
         public bool level_clear = false;
 
-        public game_manager(ContentManager content,GraphicsDevice graphics_device)
+        public game_manager(ContentManager content,GameWindow window,GraphicsDevice graphics_device)
         {
             ui_manager = new ui_manager();
             map_manager = new map_manager();
             entity_manager = new entity_manager();
-            camera_manager = new camera_manager(graphics_device);
+            camera_manager = new camera_manager(window,graphics_device);
             particle_manager = new particle_manager(content); 
             projectile_manager = new projectile_manager();
             collision_manager = new collision_manager();
@@ -73,8 +74,9 @@ namespace old_heart
         public void add_projectile(projectile projectile,bool player_projectile = false)
         {
             projectile_manager.add(projectile);
-            if (player_projectile)
+            if (projectile.owner == player)
             {
+                Debug.WriteLine("add projectile from player");  
                 collision_manager.add(projectile.collision, "player_hitbox");
             }
             else
@@ -90,16 +92,12 @@ namespace old_heart
             ui_manager.update(gameTime);
             //map_manager.update(gameTime);  map don't update lol
             entity_manager.update(gameTime);
+            camera_manager.update(gameTime, player);
             particle_manager.update(gameTime);
             projectile_manager.update(gameTime);
             collision_manager.update(gameTime);
 
             debug_manager.update(gameTime);
-
-            if(player != null)
-            {
-                camera_manager.update(gameTime, player.position);
-            }
 
             clear_inactive_node();
         }
@@ -117,8 +115,12 @@ namespace old_heart
                 {
                     entity_manager.remove(entity);
                     if (entity.collision is ICollisionActor actor) {
-                        collision_manager.remove(actor); // remove it from collision manager 
+                        collision_manager.remove(actor); // remove it from collision manager
                         Debug.WriteLine("game_manager test collision entity removed " + entity);
+                    }
+                    if (entity.collision is node node)
+                    {
+                        debug_manager.remove(node);
                     }
                 }
             }
@@ -133,32 +135,44 @@ namespace old_heart
                         collision_manager.remove(actor); // remove it from collision manager 
                         Debug.WriteLine("game_manager test collision projectile removed " + projectile);
                     }
+                    if (projectile.collision is node node)
+                    {
+                        debug_manager.remove(node);
+                    }
                 }
             }
         }
         public void draw(SpriteBatch sprite_batch)
         {
+            Matrix ui_camera_matrix = camera_manager.ui_camera.GetViewMatrix();
             Matrix camera_matrix = camera_manager.camera.GetViewMatrix();
 
-            sprite_batch.Begin(samplerState: SamplerState.PointClamp , transformMatrix: camera_matrix);
+            sprite_batch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: ui_camera_matrix);   // draw blue background
+            sprite_batch.FillRectangle(new RectangleF(0, 0, camera_manager.viewport_adapter.VirtualWidth, camera_manager.viewport_adapter.VirtualHeight), Color.CornflowerBlue);
+            sprite_batch.End();
+
+            sprite_batch.Begin(samplerState: SamplerState.PointClamp , transformMatrix: camera_matrix);    // low layer
             map_manager.draw_low(sprite_batch);
             particle_manager.draw_low(sprite_batch);
             sprite_batch.End();
 
-            sprite_batch.Begin(samplerState: SamplerState.PointClamp , sortMode: SpriteSortMode.FrontToBack, transformMatrix: camera_matrix);
+            sprite_batch.Begin(samplerState: SamplerState.PointClamp , sortMode: SpriteSortMode.FrontToBack, transformMatrix: camera_matrix); // sorted entity and projectile layer
             entity_manager.draw(sprite_batch);
             projectile_manager.draw(sprite_batch);
             sprite_batch.End();
 
-            sprite_batch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: camera_matrix);
+            sprite_batch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: camera_matrix);  // high layer
             particle_manager.draw_high(sprite_batch);
             map_manager.draw_high(sprite_batch);
             debug_manager.draw(sprite_batch); // debug 
             sprite_batch.End();
 
-            sprite_batch.Begin(samplerState: SamplerState.PointClamp );
+            sprite_batch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: ui_camera_matrix); // ui layer
             ui_manager.draw(sprite_batch);
             sprite_batch.End();
+        }
+        public void unload()
+        {
 
         }
     }

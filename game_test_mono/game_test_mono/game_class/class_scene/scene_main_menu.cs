@@ -20,9 +20,9 @@ namespace old_heart
 
             font = Content.Load<SpriteFont>("font/test_font");
 
-            test_text = new ui_text("Chess Battle Advanced\nclick or V to play\nEsc to quit", font, new Vector2(100, 50));
+            test_text = new ui_text("Chess Battle Advanced\nclick or V to play\nEsc to quit", font, new Vector2(10, 5));
             game_manager.add_ui(test_text);
-            start_button = new ui_button(Content, new Rectangle(150, 500, 200, 100));
+            start_button = new ui_button(Content, new Rectangle(15, 400, 100, 50));
             game_manager.add_ui(start_button);
 
 
@@ -30,7 +30,6 @@ namespace old_heart
 
         public override void Update(GameTime gameTime)
         {
-            update_all(gameTime);
             if (global.input.keyboard_state.WasKeyPressed(Keys.V))
             {
                 ScreenManager.ReplaceScreen(new gameplay(game_ref), fade_transition);
@@ -39,6 +38,8 @@ namespace old_heart
             {
                 ScreenManager.ReplaceScreen(new gameplay(game_ref), fade_transition);
             }
+
+            update_all(gameTime);
         }
         public override void Draw(GameTime gameTime)
         {

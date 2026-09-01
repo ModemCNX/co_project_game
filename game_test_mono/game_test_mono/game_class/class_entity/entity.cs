@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using System;
-using System.Security.Cryptography.X509Certificates;
-using static old_heart.entity;
 
 namespace old_heart
 {
@@ -19,7 +17,7 @@ namespace old_heart
         public animation_player_base animation_player;
 
         public collision_shape collision;
-        public float hit_box_radius = 15; // for collision // hit_box is circle (BoundingCircle2D)
+        public float hit_box_radius = 10; // for collision // hit_box is circle (BoundingCircle2D)
 
         public float ground_friction = 10f;
         public float max_velocity = 400;

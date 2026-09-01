@@ -8,6 +8,8 @@ namespace old_heart
 {
     public abstract class projectile : node 
     {
+        public entity owner;
+
         public ContentManager content;
         public Texture2D texture;
 
