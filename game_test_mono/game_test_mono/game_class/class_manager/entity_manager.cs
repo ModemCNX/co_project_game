@@ -4,10 +4,8 @@ using System.Collections.Generic;
 
 namespace old_heart
 {
-
     public class entity_manager
     {
-
         public List<entity> entity_list = new List<entity> { }; //  all entity in this scene
         public entity_manager()
         {

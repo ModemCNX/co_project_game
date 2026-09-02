@@ -3,11 +3,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace old_heart
 {
-
     public class animation_data
     {
         public Dictionary<Enum, animation> data = new Dictionary<Enum, animation>();

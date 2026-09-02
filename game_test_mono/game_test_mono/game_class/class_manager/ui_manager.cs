@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace old_heart
 {
-
     public class ui_manager
     {
         public List<node> ui_node_list = new List<node> { }; //  ui

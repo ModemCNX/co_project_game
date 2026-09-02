@@ -10,7 +10,6 @@ using MonoGame.Extended.Particles.Profiles;
 
 namespace old_heart
 {
-
     public class particle_manager
     {
         public ParticleEffect low_particle_effect;

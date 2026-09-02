@@ -13,7 +13,7 @@ namespace old_heart
         public override void Draw(SpriteBatch sprite_batch) // for debug
         {
             BoundingBox2D box = Shape.BoundingBox;
-            sprite_batch.DrawRectangle(new RectangleF(box.Min.X, box.Min.Y, box.Width, box.Height), Color.DarkMagenta,5,0);
+            sprite_batch.DrawRectangle(new RectangleF(box.Min.X, box.Min.Y, box.Width, box.Height), Color.DarkMagenta,1,0);
         }
     }
 }

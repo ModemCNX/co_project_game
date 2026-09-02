@@ -17,6 +17,7 @@ namespace old_heart
 
         public float hit_box_radius = 15; // for collision // hit_box is circle (BoundingCircle2D)
         public Vector2 sprite_origin;
+        public Vector2 sprite_scale = new Vector2(1,1);
 
         public float rotation = 0;
 
@@ -27,15 +28,15 @@ namespace old_heart
         public bool alive = true;
         public float time_left = 0;
 
-        public float ground_friction = 5f;
-        public float max_velocity = 400;
+        //public float ground_friction = 5f;
+        public float max_velocity = 1000;
         public projectile(ContentManager content_set, float time_left,Vector2 position)
         {
             content = content_set;
             this.time_left = time_left;
             this.position = position;
-            collision.Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));
-            sprite_origin = new Vector2((texture.Width / 2), (texture.Height / 2)); // position is center X and center Y
+            this.collision = new collision_shape_circle(new BoundingCircle2D(position, hit_box_radius));
+            collision.owner = this;
         }
         public override void Update(GameTime gameTime)
         {
@@ -54,14 +55,16 @@ namespace old_heart
             }
             
 
-            velocity -= velocity * ground_friction * delta_time;
+            //velocity -= velocity * ground_friction * delta_time;   // friction
+            
+
+            velocity += acceleration * delta_time;
+            position += velocity * delta_time;
+
             if (velocity.Length() > max_velocity)
             {
                 velocity = Vector2.Normalize(velocity) * max_velocity;
             }
-
-            velocity += acceleration * delta_time;
-            position += velocity * delta_time;
 
             collision.Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));  // update collision position
         }
@@ -72,14 +75,17 @@ namespace old_heart
             active = false; // active = false make this get instant delete
         }
 
-        public void collide_wall(CollisionPair2D pair , float delta_time) // wall collision get call from collision_manager
+        public virtual void collide_wall(CollisionPair2D pair , float delta_time) // wall collision get call from collision_manager
         {
-            velocity += pair.FirstResult.MinimumTranslationVector / delta_time; // devided by delta_time for wall to push instantly
+            //velocity += pair.FirstResult.MinimumTranslationVector / delta_time; // devided by delta_time for wall to push instantly   // bounce off wall
+
+            velocity = Vector2.Zero;  // stop move and time_out when hit wall
+            time_left = 0;
         }
         public override void Draw(SpriteBatch sprite_batch)
         {
             float layer_depth = (position.Y + 50000f) / 100000f;
-            sprite_batch.Draw(texture, position,null,Color.White,rotation, sprite_origin, 1,SpriteEffects.None, layer_depth);
+            sprite_batch.Draw(texture, position,null,Color.White,rotation, sprite_origin, sprite_scale,SpriteEffects.None, layer_depth);
         }
     }
 }

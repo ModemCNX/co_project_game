@@ -8,7 +8,6 @@ using System;
 
 namespace old_heart
 {
-
     public class camera_manager
     {
         public OrthographicCamera ui_camera;  // not move

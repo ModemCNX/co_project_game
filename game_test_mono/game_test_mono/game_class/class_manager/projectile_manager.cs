@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace old_heart
 {
-
     public class projectile_manager
     {
 

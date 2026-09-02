@@ -7,7 +7,6 @@ using System.Diagnostics;
 
 namespace old_heart
 {
-
     public class debug_manager
     {
         public List<node> debug_node_list = new List<node> { };

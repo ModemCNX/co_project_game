@@ -92,6 +92,18 @@
 /processorParam:TextureFormat=Color
 /build:Placeholder/Player/Walk.png
 
+#begin Placeholder/Weapons/Head.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Placeholder/Weapons/Head.png
+
 #begin Player.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -65,6 +65,14 @@ namespace old_heart
                 take_damage(1);
                 Debug.WriteLine("hp left " + hp + " / " + max_hp);
             }
+            if (global.input.keyboard_state.WasKeyPressed(Keys.T))
+            {
+                projectile_test projectile_test = new projectile_test(content, 3, position);
+                projectile_test.owner = this;
+                projectile_test.velocity = Vector2.Normalize(global.input.scaled_mouse_world_position - position) * 300;
+                global.signal.spawn_projectile(projectile_test);
+            }
+
 
             base.Update(gameTime);
         }

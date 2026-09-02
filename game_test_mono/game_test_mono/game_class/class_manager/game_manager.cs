@@ -9,7 +9,6 @@ using System.Linq;
 
 namespace old_heart
 {
-
     public class game_manager  // manage everything in game scene
     {
         public ui_manager ui_manager;
@@ -39,6 +38,9 @@ namespace old_heart
             collision_manager = new collision_manager();
 
             debug_manager = new debug_manager();
+
+            global.signal.signal_spawn_projectile += add_projectile;
+            global.signal.signal_spawn_entity += add_entity;
         }
         public void add_ui(node node)
         {
@@ -71,20 +73,20 @@ namespace old_heart
             }
             debug_manager.add(entity.collision);
         }
-        public void add_projectile(projectile projectile,bool player_projectile = false)
+        public void add_projectile(projectile projectile)
         {
             projectile_manager.add(projectile);
             if (projectile.owner == player)
             {
-                Debug.WriteLine("add projectile from player");  
+                //Debug.WriteLine("add projectile from player");  
                 collision_manager.add(projectile.collision, "player_hitbox");
             }
             else
             {
                 collision_manager.add(projectile.collision, "enemy_hitbox");
             }
+            debug_manager.add(projectile.collision);
         }
-        
         public void update(GameTime gameTime)
         {
             //float delta_time = (float)gameTime.ElapsedGameTime.TotalSeconds
@@ -116,11 +118,15 @@ namespace old_heart
                     entity_manager.remove(entity);
                     if (entity.collision is ICollisionActor actor) {
                         collision_manager.remove(actor); // remove it from collision manager
-                        Debug.WriteLine("game_manager test collision entity removed " + entity);
+                        //Debug.WriteLine("game_manager test collision entity removed " + entity);
                     }
                     if (entity.collision is node node)
                     {
                         debug_manager.remove(node);
+                    }
+                    if (entity is player)
+                    {
+                        player = null;
                     }
                 }
             }
@@ -133,7 +139,7 @@ namespace old_heart
                     if (projectile.collision is ICollisionActor actor)
                     {
                         collision_manager.remove(actor); // remove it from collision manager 
-                        Debug.WriteLine("game_manager test collision projectile removed " + projectile);
+                        //Debug.WriteLine("game_manager test collision projectile removed " + projectile);
                     }
                     if (projectile.collision is node node)
                     {
@@ -173,7 +179,9 @@ namespace old_heart
         }
         public void unload()
         {
-
+            Debug.WriteLine("game manager unloaded signal subscribtion");
+            global.signal.signal_spawn_projectile -= add_projectile;
+            global.signal.signal_spawn_entity -= add_entity;
         }
     }
 }

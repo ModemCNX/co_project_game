@@ -15,7 +15,7 @@ namespace old_heart
             public static MouseStateExtended mouse_state;
 
             public static Point scaled_mouse_position = Point.Zero;
-            public static Point scaled_mouse_world_position = Point.Zero;
+            public static Vector2 scaled_mouse_world_position = Vector2.Zero;
             public static void update_input_state()
             {
                 KeyboardExtended.Update(); // update keyboard input 
@@ -28,16 +28,20 @@ namespace old_heart
             public static void update_scaled_mouse(BoxingViewportAdapter viewport , OrthographicCamera camera) // call from camera manager
             {
                 scaled_mouse_position = viewport.PointToScreen(mouse_state.Position);
-                scaled_mouse_world_position = camera.ScreenToWorld(mouse_state.Position.ToVector2()) .ToPoint() ;
+                scaled_mouse_world_position = camera.ScreenToWorld(mouse_state.Position.ToVector2());
             }
         }
         public static class signal
         {
-            static event Action<projectile,bool> signal_spawn_projectile;
-
-            public static void spawn_projectile(projectile projectile,Vector2 position, bool player_projectile = false)
+            public static event Action<projectile> signal_spawn_projectile;
+            public static event Action<entity> signal_spawn_entity;
+            public static void spawn_projectile(projectile projectile)
             {
-                signal_spawn_projectile.Invoke(projectile, player_projectile);
+                signal_spawn_projectile.Invoke(projectile);
+            }
+            public static void spawn_entity(entity entity)
+            {
+                signal_spawn_entity.Invoke(entity);
             }
         }
     }

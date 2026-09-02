@@ -32,7 +32,10 @@ namespace old_heart
             collision_world.AddLayer("wall", wall_layer);
 
             collision_world.EnableCollisionBetweenLayers("player", "wall");
+            collision_world.EnableCollisionBetweenLayers("player_hitbox", "wall");
+
             collision_world.EnableCollisionBetweenLayers("enemy", "wall");
+            collision_world.EnableCollisionBetweenLayers("enemy_hitbox", "wall");
         }
         public void add(ICollisionActor collision_object ,String collision_layer_name)
         {
@@ -50,7 +53,10 @@ namespace old_heart
             collision_world.RebuildDynamicLayers();
 
             resolve_wall_collision("player", delta_time);
+            resolve_wall_collision("player_hitbox", delta_time);
+
             resolve_wall_collision("enemy", delta_time);
+            resolve_wall_collision("enemy_hitbox", delta_time);
         }
 
         public void resolve_wall_collision(string layer_that_collide_with_wall ,float delta_time) // use in update only
@@ -64,9 +70,12 @@ namespace old_heart
                     {
                         entity.collide_wall(pair, delta_time);
                     }
-                    else
+                    else if (collision_shape.owner is projectile projectile)
                     {
-                        Debug.WriteLine("collision_shape.owner is not entity : " + collision_shape);
+                        projectile.collide_wall(pair, delta_time);
+                    }else
+                    {
+                        Debug.WriteLine("collision_shape.owner is not entity nor projectile : " + collision_shape);
                     }
                 }
                 //Debug.WriteLine(pair.First.GetType().Name);
