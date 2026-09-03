@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -10,11 +11,14 @@ namespace old_heart
     {
         private SpriteFont font;
 
-        
+
 
         public ui_button return_button;
         public ui_text test_text;
         public ui_text test_text2;
+
+        leukemia test_enemy;
+        private ContentManager content;
         public gameplay(Game1 game) : base(game)
         {
         }
@@ -41,6 +45,8 @@ namespace old_heart
             game_manager.add_map_collision(wall);
             collision_shape_box wall2 = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(100f, 500f), new Vector2(500f, 64f)));
             game_manager.add_map_collision(wall2);
+
+            leukemia enemy1 = new leukemia(content, max_hp: 5, position: new Vector2(400, 300), speed: 80f); //คำสั่งเรียก leukemia (ถ้าไม่มี script เรียก animation ยังใช้ไม่ได้)
         }
         public override void Update(GameTime gameTime)
         {
@@ -63,7 +69,6 @@ namespace old_heart
                     $"\nplayer animation : {game_manager.player.animation_player.current_animation.name} [{game_manager.player.animation_player.current_frame_index}]";
             }
 
-            
 
             update_all(gameTime);
         }
@@ -71,9 +76,7 @@ namespace old_heart
         {
 
         }
-        public override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
-        }
+        
     }
+    
 }

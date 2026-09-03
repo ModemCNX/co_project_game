@@ -83,6 +83,8 @@ namespace old_heart
         {
             animation_player.update(delta_time, current_direction.ToString());
         }
+
+
         public void die()
         {
             alive = false;

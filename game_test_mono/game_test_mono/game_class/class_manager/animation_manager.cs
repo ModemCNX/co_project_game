@@ -100,5 +100,10 @@ namespace old_heart
 
             sprite_batch.Draw(texture, position, source_rectangle,Color.White,0,sprite_origin,sprite_scale,SpriteEffects.None, layer_depth);
         }
+
+        internal void update_animation(float delta_time)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

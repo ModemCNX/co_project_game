@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace old_heart
         public const string state_frightened = "Frightened";
         public const string state_dizzy = "Dizzy";
         public const string state_died = "Died";
-        public string state = state_normal;
+        public string _state = state_normal;
 
         // target (player)
         public node target;
@@ -49,6 +50,9 @@ namespace old_heart
         private int patrol_index = 0;
         private const float patrol_point_threshold = 8f;
 
+        //Animation
+        public enum state { idle, walk }
+
         public leukemia(ContentManager content_set, int max_hp, Vector2 position, float speed)
             : base(content_set, max_hp, position, speed)
         {
@@ -62,7 +66,7 @@ namespace old_heart
             float delta_time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // shield regen ทำงานอิสระจาก state ตามที่ต้องการ
-            if (shield == false && state != state_died)
+            if (shield == false && _state != state_died)
             {
                 shield_timer_current -= delta_time;
                 if (shield_timer_current <= 0f)
@@ -71,7 +75,7 @@ namespace old_heart
                 }
             }
 
-            switch (state)
+            switch (_state)
             {
                 case state_normal:
                     update_clone_timer(delta_time);
@@ -138,7 +142,7 @@ namespace old_heart
 
         private void enter_frightened()
         {
-            state = state_frightened;
+            _state = state_frightened;
             frightened_exit_timer = 0f;
         }
 
@@ -157,7 +161,7 @@ namespace old_heart
                 frightened_exit_timer += delta_time;
                 if (frightened_exit_timer >= frightened_exit_delay)
                 {
-                    state = state_normal;
+                    _state = state_normal;
                     patrol_origin = position; // จุดเริ่ม patrol ใหม่ตามตำแหน่งปัจจุบัน
                     patrol_index = 0;
                     frightened_exit_timer = 0f;
@@ -174,7 +178,7 @@ namespace old_heart
         public void on_hit_by_projectile(projectile proj) // เรียกจาก collision manager ตอน projectile ชน enemy
         {
             if (alive == false) return;
-            if (shield && (state == state_normal || state == state_frightened))
+            if (shield && (_state == state_normal || _state == state_frightened))
             {
                 enter_dizzy();
             }
@@ -182,7 +186,7 @@ namespace old_heart
 
         private void enter_dizzy()
         {
-            state = state_dizzy;
+            _state = state_dizzy;
             shield = false;
             dizzy_timer_current = dizzy_timer;
             shield_timer_current = shield_timer;
@@ -198,7 +202,7 @@ namespace old_heart
             dizzy_timer_current -= delta_time;
             if (dizzy_timer_current <= 0f)
             {
-                state = state_normal;
+                _state = state_normal;
                 patrol_origin = position;
                 patrol_index = 0;
             }
@@ -227,8 +231,52 @@ namespace old_heart
 
             if (alive == false)
             {
-                state = state_died;
+                _state = state_died;
             }
         }
-      }
+        // animation
+
+        public class animation_player_enemy : animation_player_base
+        {
+            public enum animation_name { idle, walk, } // TODO: เพิ่ม died ถ้าต้องการ sprite ตอนตายแยกต่างหาก
+
+            public static readonly animation_data animation_data = new animation_data();
+            private object animation_player;
+
+            public animation_player_enemy(ContentManager content) : base()
+            {
+                if (animation_data.data.Count == 0)
+                {
+                    load(content);
+                }
+
+                base.data = animation_data;
+
+                default_animation = animation_data.data[animation_name.idle];
+                current_animation = default_animation;
+            }
+            public void load(ContentManager content)
+            {
+                // TODO: เปลี่ยน path ให้ตรงกับ sprite sheet จริงของ enemy ตัวนี้
+                Texture2D idle_texture = content.Load<Texture2D>("Placeholder/Beast/Idle");
+                animation idle_animation = new animation(idle_texture, frame_per_sec: 2);
+                idle_animation.name = "enemy idle";
+                animation_data.data.Add(animation_name.idle, idle_animation);
+
+                Texture2D walk_texture = content.Load<Texture2D>("Placeholder/Beast/Walk");
+                animation walk_animation = new animation(walk_texture, frame_per_sec: 8);
+                walk_animation.name = "enemy walk";
+                animation_data.data.Add(animation_name.walk, walk_animation);
+
+                // TODO: ใส่ dizzy sprite sheet จริงตอนมี asset แล้ว ตอนนี้ใช้ idle ไปพลางๆ กัน error
+                //Texture2D dizzy_texture = content.Load<Texture2D>("Placeholder/Beast/Idle");
+                //animation dizzy_animation = new animation(dizzy_texture, frame_per_sec: 2);
+                //dizzy_animation.name = "enemy dizzy";
+                //animation_data.data.Add(animation_name.dizzy, dizzy_animation);
+            }
+
+           
+
+        }
+    }
 }

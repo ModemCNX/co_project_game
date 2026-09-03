@@ -17,9 +17,6 @@ namespace old_heart
         readonly ScreenManager screen_manager;
         int eee = 1;
 
-        leukemia test_enemy;
-        private ContentManager content;
-
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -51,7 +48,6 @@ namespace old_heart
         {
             sprite_batch = new SpriteBatch(GraphicsDevice);
 
-            test_enemy = new leukemia(content,max_hp: 5,position: new Vector2(400, 300),speed: 80f); //คำสั่งเรียก leukemia (ถ้าไม่มี script เรียก animation ยังใช้ไม่ได้)
         }
 
         protected override void Update(GameTime gameTime)
@@ -61,7 +57,6 @@ namespace old_heart
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || global.input.keyboard_state.IsKeyDown(Keys.Escape))
                 Exit();
 
-            test_enemy.Update(gameTime); //ของ Enemy
 
             base.Update(gameTime);
         }
@@ -71,7 +66,7 @@ namespace old_heart
         //    GraphicsDevice.Clear(Color.CornflowerBlue);
 
         //    sprite_batch.Begin(samplerState: SamplerState.PointClamp);
-               //test_enemy.Draw(sprite_batch); // Enemy
+               
         //    sprite_batch.End();
 
         //    base.Draw(gameTime);
