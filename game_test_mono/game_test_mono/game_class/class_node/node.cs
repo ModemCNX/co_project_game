@@ -5,6 +5,7 @@ public abstract class node
 {
     public bool active  = true;
     public bool visible = true;
+    internal Vector2 position;
 
     // Your universal methods
     public abstract void Update(GameTime gameTime);

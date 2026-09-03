@@ -89,7 +89,7 @@ namespace old_heart
             // play efx or something
             active = false; // active = false make this get instant delete
         }
-        public void take_damage(int damage_taken)
+        public virtual void take_damage(int damage_taken) //เติม virtual ให้ใช้กับ enemy ได้
         {
             hp -= damage_taken;
             if(hp  <= 0)
