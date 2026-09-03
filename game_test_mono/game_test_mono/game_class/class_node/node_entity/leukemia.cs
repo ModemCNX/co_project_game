@@ -238,10 +238,9 @@ namespace old_heart
 
         public class animation_player_enemy : animation_player_base
         {
-            public enum animation_name { idle, walk, } // TODO: เพิ่ม died ถ้าต้องการ sprite ตอนตายแยกต่างหาก
+            public enum animation_name { idle, walk, } 
 
             public static readonly animation_data animation_data = new animation_data();
-            private object animation_player;
 
             public animation_player_enemy(ContentManager content) : base()
             {
@@ -258,24 +257,24 @@ namespace old_heart
             public void load(ContentManager content)
             {
                 // TODO: เปลี่ยน path ให้ตรงกับ sprite sheet จริงของ enemy ตัวนี้
-                Texture2D idle_texture = content.Load<Texture2D>("Placeholder/Beast/Idle");
+                Texture2D idle_texture = content.Load<Texture2D>("Placeholder/Enemies/Beast");
                 animation idle_animation = new animation(idle_texture, frame_per_sec: 2);
                 idle_animation.name = "enemy idle";
                 animation_data.data.Add(animation_name.idle, idle_animation);
 
-                Texture2D walk_texture = content.Load<Texture2D>("Placeholder/Beast/Walk");
+                Texture2D walk_texture = content.Load<Texture2D>("Placeholder/Enemies/Beast");
                 animation walk_animation = new animation(walk_texture, frame_per_sec: 8);
                 walk_animation.name = "enemy walk";
                 animation_data.data.Add(animation_name.walk, walk_animation);
 
                 // TODO: ใส่ dizzy sprite sheet จริงตอนมี asset แล้ว ตอนนี้ใช้ idle ไปพลางๆ กัน error
-                //Texture2D dizzy_texture = content.Load<Texture2D>("Placeholder/Beast/Idle");
+                //Texture2D dizzy_texture = content.Load<Texture2D>("Placeholder/Enemies/Beast");
                 //animation dizzy_animation = new animation(dizzy_texture, frame_per_sec: 2);
                 //dizzy_animation.name = "enemy dizzy";
                 //animation_data.data.Add(animation_name.dizzy, dizzy_animation);
             }
 
-           
+
 
         }
     }
