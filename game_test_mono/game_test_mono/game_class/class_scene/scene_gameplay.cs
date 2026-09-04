@@ -32,7 +32,7 @@ namespace old_heart
             test_text.text_color = Color.DarkRed;
             test_text.text_scale = new Vector2(0.5f, 0.5f);
             game_manager.add_ui(test_text);
-            test_text2 = new ui_text("press P to view hitbox testttttttt  Chess Battle Advanced\nE shake\nF player take 1 damage\nT spawn test projectile", font, new Vector2(25f, 0f));
+            test_text2 = new ui_text("press P to view hitbox testttttttt  Chess Battle Advanced\nE shake\nF player take 1 damage\nT spawn test projectile\nZ spawn test particle", font, new Vector2(25f, 0f));
             test_text2.text_color = Color.DarkOrange;
             game_manager.add_map(test_text2);
             return_button = new ui_button(Content , new Rectangle(15, 400, 100, 50));
@@ -59,7 +59,7 @@ namespace old_heart
                 ScreenManager.ReplaceScreen(new main_menu(game_ref), fade_transition);
             }
 
-            test_text.text_string = $"gameplay scene\nclick or V to go back to title bruh"+
+            test_text.text_string = $"gameplay scene fps [{(1/ gameTime.ElapsedGameTime.TotalSeconds):F2}]\nclick or V to go back to title bruh" +
             $"\nmouse_pos : {global.input.scaled_mouse_position}\nworld_mouse_pos : {global.input.scaled_mouse_world_position}";
 
             if (game_manager.player != null)

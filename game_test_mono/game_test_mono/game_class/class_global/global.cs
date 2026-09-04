@@ -35,6 +35,7 @@ namespace old_heart
         {
             public static event Action<projectile> signal_spawn_projectile;
             public static event Action<entity> signal_spawn_entity;
+            public static event Action<Enum,Vector2,bool> signal_spawn_particle;
             public static void spawn_projectile(projectile projectile)
             {
                 signal_spawn_projectile.Invoke(projectile);
@@ -42,6 +43,10 @@ namespace old_heart
             public static void spawn_entity(entity entity)
             {
                 signal_spawn_entity.Invoke(entity);
+            }
+            public static void spawn_particle(Enum particle_name, Vector2 position, bool high_layer = false)
+            {
+                signal_spawn_particle.Invoke(particle_name,position,high_layer);
             }
         }
     }

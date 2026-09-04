@@ -23,6 +23,10 @@ namespace old_heart
             _graphics.PreferredBackBufferWidth = 960;
             _graphics.PreferredBackBufferHeight = 540;
             _graphics.HardwareModeSwitch = false; // _graphics.HardwareModeSwitch = false     to enable alt tap in full screen
+
+            //_graphics.SynchronizeWithVerticalRetrace = false;         // unlimited fps cap
+            //IsFixedTimeStep = false;                                  // fps in game fix? // dont = false in real game only = false in fps test
+
             _graphics.ApplyChanges();
             //_graphics.ToggleFullScreen();
 

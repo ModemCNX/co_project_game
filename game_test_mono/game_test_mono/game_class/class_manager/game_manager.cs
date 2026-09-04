@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -41,6 +42,7 @@ namespace old_heart
 
             global.signal.signal_spawn_projectile += add_projectile;
             global.signal.signal_spawn_entity += add_entity;
+            global.signal.signal_spawn_particle += add_particle;
         }
         public void add_ui(node node)
         {
@@ -55,9 +57,9 @@ namespace old_heart
             collision_manager.add(collision_object,"wall");
             debug_manager.add(collision_object);
         }
-        public void add_particle(string not_finished_yet)
+        public void add_particle(Enum particle_name , Vector2 position ,bool high_layer)
         {
-            // call func? idk
+            particle_manager.add(particle_name ,position ,high_layer);
         }
         public void add_entity(entity entity)
         {
@@ -179,9 +181,9 @@ namespace old_heart
         }
         public void unload()
         {
-            Debug.WriteLine("game manager unloaded signal subscribtion");
             global.signal.signal_spawn_projectile -= add_projectile;
             global.signal.signal_spawn_entity -= add_entity;
+            global.signal.signal_spawn_particle -= add_particle;
         }
     }
 }
