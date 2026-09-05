@@ -11,6 +11,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\level\test_1.json" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
   </ItemGroup>
@@ -29,5 +30,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="game_class\class_weapon\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\level\test_1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

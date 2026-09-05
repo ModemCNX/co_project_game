@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -11,14 +10,13 @@ namespace old_heart
     {
         private SpriteFont font;
 
-
+        public string current_map_file;
 
         public ui_button return_button;
         public ui_text test_text;
         public ui_text test_text2;
 
         leukemia test_enemy;
-        private ContentManager content;
         public gameplay(Game1 game) : base(game)
         {
         }
@@ -76,11 +74,5 @@ namespace old_heart
 
             update_all(gameTime);
         }
-        public void OnCollision()
-        {
-
-        }
-        
     }
-    
 }
