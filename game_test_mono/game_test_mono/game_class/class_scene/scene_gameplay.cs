@@ -46,7 +46,11 @@ namespace old_heart
             collision_shape_box wall2 = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(100f, 500f), new Vector2(500f, 64f)));
             game_manager.add_map_collision(wall2);
 
-            leukemia enemy1 = new leukemia(content, max_hp: 5, position: new Vector2(400, 300), speed: 80f); //คำสั่งเรียก leukemia (ถ้าไม่มี script เรียก animation ยังใช้ไม่ได้)
+            test_enemy = new leukemia(Content, max_hp: 5, position: new Vector2(400, 300), speed: 600f); // ใช้ Content (ตัวใหญ่) ไม่ใช่ content
+            test_enemy.target = player; // ให้ enemy รู้จัก player เพื่อเช็คระยะ dangerous_rad/safe_rad
+            game_manager.add_entity(test_enemy);
+           
+
         }
         public override void Update(GameTime gameTime)
         {
