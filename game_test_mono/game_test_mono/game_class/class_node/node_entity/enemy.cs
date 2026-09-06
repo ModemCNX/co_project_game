@@ -226,6 +226,12 @@ namespace old_heart
             }
         }
 
+        public override void die()
+        {
+            base.die();
+            global.collision_manager.remove(collision); // กัน collision ค้างในโลกหลัง enemy ตาย
+        }
+
         // ---------------- Animation ----------------
 
         public override void update_animation(float delta_time)

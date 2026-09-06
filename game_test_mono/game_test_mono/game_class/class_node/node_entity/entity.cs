@@ -85,7 +85,7 @@ namespace old_heart
         }
 
 
-        public void die()
+        public virtual void die()
         {
             alive = false;
             // play efx or something

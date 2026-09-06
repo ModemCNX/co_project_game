@@ -28,6 +28,8 @@ namespace old_heart
         public bool alive = true;
         public float time_left = 0;
 
+        protected bool collision_registered = false; // กันเรียก remove ซ้ำ/เรียกกับ actor ที่ไม่เคย add
+
         //public float ground_friction = 5f;
         public float max_velocity = 1000;
         public projectile(ContentManager content_set, float time_left,Vector2 position)
@@ -37,6 +39,12 @@ namespace old_heart
             this.position = position;
             this.collision = new collision_shape_circle(new BoundingCircle2D(position, hit_box_radius));
             collision.owner = this;
+        }
+
+        protected void register_collision(string layer_name)
+        {
+            global.collision_manager.add(collision, layer_name); // TODO: เช็คว่าชื่อ property ตรงกับของจริงในโปรเจกต์ไหม
+            collision_registered = true;
         }
         public override void Update(GameTime gameTime)
         {
@@ -68,11 +76,22 @@ namespace old_heart
 
             collision.Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));  // update collision position
         }
+
+        // เรียกจาก collision_manager ตอน hitbox ของ projectile นี้ชนกับ entity เป้าหมาย
+        public virtual void on_hit_entity(entity target_entity)
+        {
+        }
+
         public void time_out()
         {
             alive = false;
             // play efx or something
             active = false; // active = false make this get instant delete
+            if (collision_registered)
+            {
+                global.collision_manager.remove(collision);
+                collision_registered = false;
+            }
         }
 
         public virtual void collide_wall(CollisionPair2D pair , float delta_time) // wall collision get call from collision_manager

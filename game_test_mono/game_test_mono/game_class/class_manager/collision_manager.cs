@@ -36,6 +36,11 @@ namespace old_heart
 
             collision_world.EnableCollisionBetweenLayers("enemy", "wall");
             collision_world.EnableCollisionBetweenLayers("enemy_hitbox", "wall");
+
+            collision_world.EnableCollisionBetweenLayers("player_hitbox", "enemy"); // หมัด/หัวที่ผู้เล่นขว้าง ชน enemy
+            collision_world.EnableCollisionBetweenLayers("enemy_hitbox", "player"); // เผื่อไว้สำหรับท่าโจมตีของ enemy ในอนาคต
+            collision_world.EnableCollisionBetweenLayers("player", "enemy");
+
         }
         public void add(ICollisionActor collision_object ,String collision_layer_name)
         {
@@ -57,6 +62,10 @@ namespace old_heart
 
             resolve_wall_collision("enemy", delta_time);
             resolve_wall_collision("enemy_hitbox", delta_time);
+
+            resolve_hitbox_collision("player_hitbox", "enemy");
+            resolve_hitbox_collision("enemy_hitbox", "player");
+            resolve_entity_body_collision("player", "enemy", delta_time);
         }
 
         public void resolve_wall_collision(string layer_that_collide_with_wall ,float delta_time) // use in update only
@@ -79,6 +88,36 @@ namespace old_heart
                     }
                 }
                 //Debug.WriteLine(pair.First.GetType().Name);
+            }
+        }
+        public void resolve_hitbox_collision(string hitbox_layer, string target_layer)
+        {
+            var collisionPairs = collision_world.QueryCollisionPairs(hitbox_layer, target_layer);
+            foreach (var pair in collisionPairs)
+            {
+                if (pair.First is collision_shape hitbox_shape && pair.Second is collision_shape target_shape)
+                {
+                    if (hitbox_shape.owner is projectile hitbox_projectile && target_shape.owner is entity target_entity)
+                    {
+                        hitbox_projectile.on_hit_entity(target_entity);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("hitbox collision owner type mismatch: " + hitbox_shape.owner + " / " + target_shape.owner);
+                    }
+                }
+            }
+        }
+
+        public void resolve_entity_body_collision(string layer_a, string layer_b, float delta_time)
+        {
+            var collisionPairs = collision_world.QueryCollisionPairs(layer_a, layer_b);
+            foreach (var pair in collisionPairs)
+            {
+                if (pair.First is collision_shape shape_a && shape_a.owner is entity entity_a)
+                {
+                    entity_a.collide_wall(pair, delta_time); // reuse: แค่ผลัก entity_a ออกด้วย MinimumTranslationVector
+                }
             }
         }
 

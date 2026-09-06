@@ -45,6 +45,8 @@ namespace old_heart
         {
             base.Initialize();
 
+            global.collision_manager = new collision_manager(); // สร้าง instance ก่อนใช้งาน
+
             screen_manager.ShowScreen(new main_menu(this)); // start in main menu naja
         }
 
@@ -57,7 +59,9 @@ namespace old_heart
         protected override void Update(GameTime gameTime)
         {
             global.input.update_input_state();
-            
+            global.collision_manager.update(gameTime); // อัปเดต collision world ทุกเฟรม
+
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || global.input.keyboard_state.IsKeyDown(Keys.Escape))
                 Exit();
 
