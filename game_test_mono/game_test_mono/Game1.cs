@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
 using System;
-using System.Diagnostics;
 
 namespace old_heart
 {
@@ -13,6 +12,7 @@ namespace old_heart
     {
         public GraphicsDeviceManager _graphics;
         public SpriteBatch sprite_batch;
+
 
         readonly ScreenManager screen_manager;
         int eee = 1;
