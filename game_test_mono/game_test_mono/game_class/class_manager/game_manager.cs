@@ -19,6 +19,7 @@ namespace old_heart
         public particle_manager particle_manager;
         public projectile_manager projectile_manager;
         public collision_manager collision_manager;
+        public level_manager level_manager;
 
         public debug_manager debug_manager;
 
@@ -37,6 +38,7 @@ namespace old_heart
             particle_manager = new particle_manager(content); 
             projectile_manager = new projectile_manager();
             collision_manager = new collision_manager();
+            level_manager = new level_manager(this);
 
             debug_manager = new debug_manager();
 
@@ -72,6 +74,10 @@ namespace old_heart
             else
             {
                 collision_manager.add(entity.collision, "enemy");
+                if (entity is enemy_leukemia enemy_leukemia)
+                {
+                    enemy_leukemia.target = this.player; // ให้ enemy รู้จัก player เพื่อเช็คระยะ dangerous_rad/safe_rad
+                }
             }
             debug_manager.add(entity.collision);
         }
@@ -91,17 +97,18 @@ namespace old_heart
         }
         public void update(GameTime gameTime)
         {
-            //float delta_time = (float)gameTime.ElapsedGameTime.TotalSeconds
-
             ui_manager.update(gameTime);
+            camera_manager.update(gameTime, player);
+            debug_manager.update(gameTime);
+
+            if (pause) return;
+
             //map_manager.update(gameTime);  map don't update lol
             entity_manager.update(gameTime);
-            camera_manager.update(gameTime, player);
             particle_manager.update(gameTime);
             projectile_manager.update(gameTime);
             collision_manager.update(gameTime);
 
-            debug_manager.update(gameTime);
 
             clear_inactive_node();
         }

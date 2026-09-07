@@ -3,12 +3,15 @@ using MonoGame.Extended;
 using MonoGame.Extended.Collisions;
 using MonoGame.Extended.Collisions.Layers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace old_heart
 {
     public class collision_manager
     {
+        public List<collision_shape> wall_list = new List<collision_shape>();
+
         Layer default_layer = new Layer(new SpatialHash(new SizeF(128f, 128f))); 
         public CollisionWorld2D collision_world ; // for collision detecting
         public collision_manager()
@@ -46,6 +49,10 @@ namespace old_heart
         {
             collision_world.Insert(collision_object, collision_layer_name);
             //Debug.WriteLine("add " + collision_object + " to " +  collision_layer_name);
+            if (collision_layer_name == "wall" && collision_object is collision_shape collision_shape)
+            {
+                wall_list.Add(collision_shape);
+            }
         }
         public void remove(ICollisionActor collision_object)
         {
