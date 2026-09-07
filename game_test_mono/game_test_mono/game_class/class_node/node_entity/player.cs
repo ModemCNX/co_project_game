@@ -17,7 +17,8 @@ namespace old_heart
         // --- combat: melee ---
         public int melee_damage = 1;
         public float melee_range = 40f;   // ระยะยื่นไปด้านหน้า
-        public float attack_duration = 20f / 60f; // ~20 frame ที่ 60fps เป็น placeholder ไปก่อน
+        public float melee_hitbox_lifetime = 0.1f; // เวลาที่ hitbox มีตัวตนอยู่ (แยกจาก attack_duration) ยิ่งน้อยยิ่งวิ่งเร็ว+หายเร็ว
+        public float attack_duration = 20f / 60f; // ~10 frame ที่ 60fps เป็น placeholder ไปก่อน
         public bool is_attacking = false;
         private float attack_timer = 0f;
 
@@ -88,6 +89,16 @@ namespace old_heart
 
             // --- aiming ---
             is_aiming = mouse_state.IsButtonDown(MouseButton.Right) && has_head;
+            if (is_aiming)
+            {
+                Vector2 to_cursor = global.input.scaled_mouse_world_position - position;
+                current_direction = get_cardinal_direction(to_cursor); // หมุนตาม cursor แบบ 4 ทิศ ทุกเฟรมที่กำลังเล็งอยู่
+                direction_locked = true; // กันไม่ให้ entity.Update() เขียนทับด้วยทิศทางจาก velocity
+            }
+            else
+            {
+                direction_locked = false; // กลับไปใช้ทิศทางตามการเดินปกติ
+            }
 
             input_direction = Vector2.Zero;
 
@@ -186,7 +197,7 @@ namespace old_heart
 
             current_direction = get_cardinal_direction(aim_direction); // ยังใช้ตัวนี้แค่สำหรับเลือก animation/sprite ทิศทาง ไม่เกี่ยวกับ hit detection แล้ว
 
-            melee_projectile punch = new melee_projectile(content, position, aim_direction, melee_range, attack_duration, melee_damage);
+            melee_projectile punch = new melee_projectile(content, position, aim_direction, melee_range, melee_hitbox_lifetime, melee_damage);
             punch.owner = this;
             global.signal.spawn_projectile(punch);
         }

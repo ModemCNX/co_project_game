@@ -14,6 +14,8 @@ namespace old_heart
         public ContentManager content;
         
         public direction current_direction = direction.down;
+        public bool movement_locked = false;
+        public bool direction_locked = false;
         public animation_player_base animation_player;
 
         public collision_shape collision;
@@ -46,19 +48,23 @@ namespace old_heart
             if (alive == false) return;
             float delta_time = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            velocity -= velocity * ground_friction * delta_time;
-            velocity += acceleration * delta_time;
-
-            if (velocity.Length() > max_velocity)
+            if (movement_locked == false)
             {
-                velocity = Vector2.Normalize(velocity) * max_velocity;
+                velocity -= velocity * ground_friction * delta_time;
+                velocity += acceleration * delta_time;
+
+                if (velocity.Length() > max_velocity)
+                {
+                    velocity = Vector2.Normalize(velocity) * max_velocity;
+                }
+
+                position += velocity * delta_time;
             }
-
-            position += velocity * delta_time;
-
             collision.Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));  // update collision position
-
-            update_direction(velocity);
+            if (direction_locked == false)
+            {
+                update_direction(velocity);
+            }
             update_animation(delta_time);
 
             void update_direction(Vector2 velocity)
