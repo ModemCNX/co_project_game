@@ -12,6 +12,8 @@ namespace old_heart
 {
     public class game_manager  // manage everything in game scene
     {
+        public ContentManager content;
+
         public ui_manager ui_manager;
         public map_manager map_manager;
         public entity_manager entity_manager;
@@ -31,6 +33,8 @@ namespace old_heart
 
         public game_manager(ContentManager content,GameWindow window,GraphicsDevice graphics_device)
         {
+            this.content = content;
+
             ui_manager = new ui_manager();
             map_manager = new map_manager();
             entity_manager = new entity_manager();

@@ -36,7 +36,7 @@ namespace old_heart
             test_text.text_scale = new Vector2(0.5f, 0.5f);
             game_manager.add_ui(test_text);
 
-            test_text_2 = new ui_text("[K] save [L] load [WASD] move [Shift] move faster [P] toggle collision [V] return\nChess Battle Advanced", font, new Vector2(10, 490));
+            test_text_2 = new ui_text("[K] save [L] load [WASD] move [Shift] move faster [P] toggle collision [V] return [B] test level\nChess Battle Advanced", font, new Vector2(10, 490));
             test_text_2.text_color = Color.DarkRed;
             test_text_2.text_scale = new Vector2(0.5f, 0.5f);
             game_manager.add_ui(test_text_2);
@@ -45,12 +45,17 @@ namespace old_heart
             game_manager.add_map_collision(wall);
             collision_shape_box wall2 = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(20f, 50f), new Vector2(500f, 64f)));
             game_manager.add_map_collision(wall2);
+            image test_image = new image(Content, new Vector2(67, 67), "Placeholder/Weapons/Head");
+            game_manager.add_map(test_image,true);
         }
         public override void Update(GameTime gameTime)
         {
             if (global.input.keyboard_state.WasKeyPressed(Keys.V))
             {
                 ScreenManager.ReplaceScreen(new main_menu(game_ref), fade_transition);
+            }else if (global.input.keyboard_state.WasKeyPressed(Keys.B))
+            {
+                ScreenManager.ReplaceScreen(new test_level(game_ref), fade_transition);
             }
             else if (global.input.keyboard_state.WasKeyPressed(Keys.K))
             {
@@ -68,13 +73,6 @@ namespace old_heart
             $"\ncurrent_level_file : {Path.GetFileName(game_manager.level_manager.current_level_file)}" +
             $"\nmouse_pos : {global.input.scaled_mouse_position}\nworld_mouse_pos : {global.input.scaled_mouse_world_position}" +
             $"\nobject count :  \nentity [{game_manager.entity_manager.entity_list.Count}]\nwall collision [{game_manager.collision_manager.wall_list.Count}] \nmap_low [{game_manager.map_manager.map_node_list.Count}] \nmap_high [{game_manager.map_manager.high_map_node_list.Count}]";
-
-            if (game_manager.player != null)
-            {
-                test_text.text_string += $"\nplayer acc : {game_manager.player.acceleration}\nvelocity : {game_manager.player.velocity.X:F2} , {game_manager.player.velocity.Y:F2}" +
-                $"\nw speed : {game_manager.player.velocity.Length():F2} \nposition : {game_manager.player.position.X:F2} , {game_manager.player.position.Y:F2}" +
-                $"\nplayer animation : {game_manager.player.animation_player.current_animation.name} [{game_manager.player.animation_player.current_frame_index}]";
-            }
 
 
             update_all(gameTime);

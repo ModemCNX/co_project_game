@@ -18,6 +18,15 @@
         "size_x": "500",
         "size_y": "64"
       }
+    },
+    {
+      "type": "image",
+      "position_x": 67,
+      "position_y": 67,
+      "data": {
+        "texture": "Placeholder/Weapons/Head",
+        "high": "True"
+      }
     }
   ]
 }
