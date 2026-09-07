@@ -21,10 +21,11 @@ namespace old_heart
         public float attack_duration = 20f / 60f; // ~10 frame ที่ 60fps เป็น placeholder ไปก่อน
         public bool is_attacking = false;
         private float attack_timer = 0f;
+        public float melee_lunge_speed = 150f;
 
         // --- combat: head throw ---
         public bool has_head = true;
-        public float head_throw_speed = 700f;
+        public float head_throw_speed = 1200f;
         public float pickup_radius = 24f;
         private head_projectile thrown_head;
 
@@ -194,6 +195,8 @@ namespace old_heart
 
             Vector2 to_cursor = global.input.scaled_mouse_world_position - position;
             Vector2 aim_direction = to_cursor != Vector2.Zero ? Vector2.Normalize(to_cursor) : Vector2.UnitY;
+
+            velocity = aim_direction * melee_lunge_speed;
 
             current_direction = get_cardinal_direction(aim_direction); // ยังใช้ตัวนี้แค่สำหรับเลือก animation/sprite ทิศทาง ไม่เกี่ยวกับ hit detection แล้ว
 

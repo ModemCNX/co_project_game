@@ -13,6 +13,10 @@ namespace old_heart
         public float drag = 3f;                    // ยิ่งมากยิ่งหยุดเร็ว
         private const float stop_velocity_threshold = 15f;
 
+        public float bounce_restitution = 0.05f;   // 0-1 ยิ่งมากยิ่งกระเด้งกลับแรง
+        public float enemy_knockback_speed = 250f; // ความแรงที่ enemy จะกระเด็น
+        private bool has_bounced = false; // กันโดนกระแทกซ้ำหลายเฟรมจาก enemy ตัวเดิม
+
         public head_projectile(ContentManager content_set, Vector2 position)
             : base(content_set, time_left: 9999f, position) // time_left ไม่ได้ใช้จริงเพราะ override Update ทั้งหมด
         {
@@ -43,12 +47,22 @@ namespace old_heart
 
         public override void on_hit_entity(entity target_entity)
         {
+
+            if (has_bounced) return;
+            has_bounced = true;
+
             if (target_entity is enemy target_enemy)
             {
+                Vector2 hit_direction = velocity != Vector2.Zero ? Vector2.Normalize(velocity) : Vector2.UnitY;
+                target_enemy.apply_knockback(hit_direction, enemy_knockback_speed); // enemy กระเด็นไปตามทิศที่หัวพุ่งเข้าใส่
                 target_enemy.on_hit_by_projectile(this);
             }
-            velocity = Vector2.Zero;
-            is_resting = true; // หัวหยุดตรงจุดที่โดน enemy ทันที
+            velocity = -velocity * bounce_restitution; // หัวสะท้อนกลับทิศตรงข้าม แรงลดลงตาม restitution
+            if (velocity.Length() < stop_velocity_threshold)
+            {
+                velocity = Vector2.Zero;
+                is_resting = true; // หัวหยุดตรงจุดที่โดน enemy ทันที
+            }
         }
 
         public override void collide_wall(CollisionPair2D pair, float delta_time)

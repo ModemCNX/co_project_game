@@ -9,6 +9,7 @@ namespace old_heart
     public class melee_projectile : projectile
     {
         public int damage;
+        public float knockback_speed = 150f;
         private HashSet<enemy> hit_enemies = new HashSet<enemy>(); // กันโดนดาเมจซ้ำจาก swing เดียวกัน
 
         public melee_projectile(ContentManager content_set, Vector2 position, Vector2 aim_direction, float travel_distance, float travel_time, int damage)
@@ -25,6 +26,9 @@ namespace old_heart
         {
             if (target_entity is enemy target_enemy && target_enemy.alive)
             {
+                Vector2 hit_direction = velocity != Vector2.Zero ? Vector2.Normalize(velocity) : Vector2.UnitY;
+                target_enemy.apply_knockback(hit_direction, knockback_speed); // ผลักตามทิศที่หมัดพุ่งเข้าใส่
+
                 target_enemy.take_damage(damage);
                 time_out(); // โดน enemy แล้วหายทันที ไม่ต้องรอ travel_time หมด
             }

@@ -16,6 +16,8 @@ namespace old_heart
         public direction current_direction = direction.down;
         public bool movement_locked = false;
         public bool direction_locked = false;
+        public Vector2 knockback_velocity = Vector2.Zero;
+        public float knockback_friction = 8f;
         public animation_player_base animation_player;
 
         public collision_shape collision;
@@ -59,6 +61,16 @@ namespace old_heart
                 }
 
                 position += velocity * delta_time;
+            }
+
+            if (knockback_velocity != Vector2.Zero)
+            {
+                knockback_velocity -= knockback_velocity * knockback_friction * delta_time;
+                position += knockback_velocity * delta_time;
+                if (knockback_velocity.Length() < 5f)
+                {
+                    knockback_velocity = Vector2.Zero;
+                }
             }
             collision.Shape = new CollisionShape2D(new BoundingCircle2D(position, hit_box_radius));  // update collision position
             if (direction_locked == false)
@@ -113,6 +125,10 @@ namespace old_heart
         public override void Draw(SpriteBatch sprite_batch)
         {
             animation_player.draw(sprite_batch, position);
+        }
+        public void apply_knockback(Vector2 direction, float speed)
+        {
+            knockback_velocity = direction * speed;
         }
     }
 }
