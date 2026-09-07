@@ -19,7 +19,7 @@ namespace old_heart
         {
             button_rect = rect;
 
-            button_texture = content.Load<Texture2D>("image/white_pixel");
+            button_texture = content.Load<Texture2D>("assets/image/other/white_pixel");
         }
 
         public override void Update(GameTime gameTime)

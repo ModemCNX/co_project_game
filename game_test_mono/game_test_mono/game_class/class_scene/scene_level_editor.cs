@@ -13,12 +13,15 @@ namespace old_heart
     {
         private SpriteFont font;
 
+        public node selecting_node;
+
         public Vector2 camera_position = new Vector2 (0, 0);
         public int camera_speed = 300; // pixel per sec
         public int camera_speed_fast = 1000; // pixel per sec  // when press shift
 
         public ui_text test_text;
         public ui_text test_text_2;
+        public ui_text test_text_3;
         public level_editor(Game1 game) : base(game)
         {
         }
@@ -36,10 +39,15 @@ namespace old_heart
             test_text.text_scale = new Vector2(0.5f, 0.5f);
             game_manager.add_ui(test_text);
 
-            test_text_2 = new ui_text("[K] save [L] load [WASD] move [Shift] move faster [P] toggle collision [V] return [B] test level\nChess Battle Advanced", font, new Vector2(10, 490));
+            test_text_2 = new ui_text("[K] save [L] load [WASD] move [Shift] move faster [P] toggle collision [V] return [B] test level", font, new Vector2(10, 510));
             test_text_2.text_color = Color.DarkRed;
             test_text_2.text_scale = new Vector2(0.5f, 0.5f);
             game_manager.add_ui(test_text_2);
+
+            test_text_3 = new ui_text("current_state = none", font, new Vector2(10, 490));
+            test_text_3.text_color = Color.DarkRed;
+            test_text_3.text_scale = new Vector2(0.5f, 0.5f);
+            game_manager.add_ui(test_text_3);
 
             collision_shape_box wall = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(50f, 10f), new Vector2(64f, 500f)));
             game_manager.add_map_collision(wall);
@@ -71,8 +79,8 @@ namespace old_heart
 
             test_text.text_string = $"level_editor scene fps [{(1/ gameTime.ElapsedGameTime.TotalSeconds):F2}]" +
             $"\ncurrent_level_file : {Path.GetFileName(game_manager.level_manager.current_level_file)}" +
-            $"\nmouse_pos : {global.input.scaled_mouse_position}\nworld_mouse_pos : {global.input.scaled_mouse_world_position}" +
-            $"\nobject count :  \nentity [{game_manager.entity_manager.entity_list.Count}]\nwall collision [{game_manager.collision_manager.wall_list.Count}] \nmap_low [{game_manager.map_manager.map_node_list.Count}] \nmap_high [{game_manager.map_manager.high_map_node_list.Count}]";
+            $"\nworld_mouse_pos : {global.input.scaled_mouse_world_position}" +
+            $"\nobject count bellow\nentity :{game_manager.entity_manager.entity_list.Count}\nwall collision :{game_manager.collision_manager.wall_list.Count}] \nmap_low :{game_manager.map_manager.map_node_list.Count} \nmap_high :{game_manager.map_manager.high_map_node_list.Count}";
 
 
             update_all(gameTime);
