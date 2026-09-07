@@ -3,12 +3,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Text.Json;
 
 namespace old_heart
 {
@@ -16,15 +13,14 @@ namespace old_heart
     {
         private SpriteFont font;
 
-        public string current_level_file;
+        public Vector2 camera_position = new Vector2 (0, 0);
+        public int camera_speed = 300; // pixel per sec
+        public int camera_speed_fast = 1000; // pixel per sec  // when press shift
 
         public ui_text test_text;
+        public ui_text test_text_2;
         public level_editor(Game1 game) : base(game)
         {
-            string file_directory = AppDomain.CurrentDomain.BaseDirectory;
-            string game_root_file = Path.GetFullPath(Path.Combine(file_directory, "..", "..", ".."));  // get true game sorce code file
-            string level_folder = Path.Combine(game_root_file, "Content", "level");
-            current_level_file = Path.Combine(level_folder, "test_1.json");
         }
         public override void LoadContent()
         {
@@ -32,14 +28,22 @@ namespace old_heart
 
             font = Content.Load<SpriteFont>("font/test_font");
 
+            game_manager.level_manager.set_level_file("test_1.json");         // exact JSON file name
+            game_manager.pause = true;
+
             test_text = new ui_text("this text get replace in update function anyway", font, new Vector2(10, 5));
             test_text.text_color = Color.DarkRed;
             test_text.text_scale = new Vector2(0.5f, 0.5f);
             game_manager.add_ui(test_text);
 
-            collision_shape_box wall = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(500f, 100f), new Vector2(64f, 500f)));
-            //game_manager.add_map_collision(wall);
-            collision_shape_box wall2 = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(100f, 500f), new Vector2(500f, 64f)));
+            test_text_2 = new ui_text("[K] save [L] load [WASD] move [Shift] move faster [P] toggle collision [V] return\nChess Battle Advanced", font, new Vector2(10, 490));
+            test_text_2.text_color = Color.DarkRed;
+            test_text_2.text_scale = new Vector2(0.5f, 0.5f);
+            game_manager.add_ui(test_text_2);
+
+            collision_shape_box wall = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(50f, 10f), new Vector2(64f, 500f)));
+            game_manager.add_map_collision(wall);
+            collision_shape_box wall2 = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(20f, 50f), new Vector2(500f, 64f)));
             game_manager.add_map_collision(wall2);
         }
         public override void Update(GameTime gameTime)
@@ -48,52 +52,69 @@ namespace old_heart
             {
                 ScreenManager.ReplaceScreen(new main_menu(game_ref), fade_transition);
             }
-            else if (global.input.keyboard_state.WasKeyPressed(Keys.Q))
+            else if (global.input.keyboard_state.WasKeyPressed(Keys.K))
             {
-                save_level();
+                game_manager.level_manager.save_level();
+            }
+            else if (global.input.keyboard_state.WasKeyPressed(Keys.L))
+            {
+                game_manager.level_manager.load_level();
             }
 
-            test_text.text_string = $"level_editor scene fps [{(1/ gameTime.ElapsedGameTime.TotalSeconds):F2}]                                                                       V to go back to title bruh" +
-            $"\ncurrent_level_file : {Path.GetFileName(current_level_file)}" +
-            $"\nmouse_pos : {global.input.scaled_mouse_position}\nworld_mouse_pos : {global.input.scaled_mouse_world_position}";
+            move_camera(gameTime);
+
+
+            test_text.text_string = $"level_editor scene fps [{(1/ gameTime.ElapsedGameTime.TotalSeconds):F2}]" +
+            $"\ncurrent_level_file : {Path.GetFileName(game_manager.level_manager.current_level_file)}" +
+            $"\nmouse_pos : {global.input.scaled_mouse_position}\nworld_mouse_pos : {global.input.scaled_mouse_world_position}" +
+            $"\nobject count :  \nentity [{game_manager.entity_manager.entity_list.Count}]\nwall collision [{game_manager.collision_manager.wall_list.Count}] \nmap_low [{game_manager.map_manager.map_node_list.Count}] \nmap_high [{game_manager.map_manager.high_map_node_list.Count}]";
 
             if (game_manager.player != null)
             {
                 test_text.text_string += $"\nplayer acc : {game_manager.player.acceleration}\nvelocity : {game_manager.player.velocity.X:F2} , {game_manager.player.velocity.Y:F2}" +
-                    $"\nw speed : {game_manager.player.velocity.Length():F2} \nposition : {game_manager.player.position.X:F2} , {game_manager.player.position.Y:F2}" +
-                    $"\nplayer animation : {game_manager.player.animation_player.current_animation.name} [{game_manager.player.animation_player.current_frame_index}]";
+                $"\nw speed : {game_manager.player.velocity.Length():F2} \nposition : {game_manager.player.position.X:F2} , {game_manager.player.position.Y:F2}" +
+                $"\nplayer animation : {game_manager.player.animation_player.current_animation.name} [{game_manager.player.animation_player.current_frame_index}]";
             }
 
 
             update_all(gameTime);
-        }
-        public void save_level()
-        {
-            if (current_level_file == null)
+
+            void move_camera(GameTime game_time)
             {
-                Debug.WriteLine("level file is null error");
+                float delta_time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                KeyboardStateExtended keyboard_state = global.input.keyboard_state;
+                Vector2 input_direction = Vector2.Zero;
+
+                if (keyboard_state.IsKeyDown(Keys.D))
+                {
+                    input_direction += new Vector2(1, 0);
+                }
+                if (keyboard_state.IsKeyDown(Keys.A))
+                {
+                    input_direction += new Vector2(-1, 0);
+                }
+                if (keyboard_state.IsKeyDown(Keys.S))
+                {
+                    input_direction += new Vector2(0, 1);
+                }
+                if (keyboard_state.IsKeyDown(Keys.W))
+                {
+                    input_direction += new Vector2(0, -1);
+                }
+                if (input_direction != Vector2.Zero)
+                {
+                    if (keyboard_state.IsKeyDown(Keys.LeftShift))
+                    {
+                        input_direction = Vector2.Normalize(input_direction) * camera_speed_fast;
+                    }
+                    else
+                    {
+                        input_direction = Vector2.Normalize(input_direction) * camera_speed;
+                    }
+                }
+                camera_position += input_direction * delta_time;
+                game_manager.camera_manager.camera.LookAt(camera_position.ToPoint().ToVector2());
             }
-            level_data level_data = new level_data();
-            level_data.name = "test";
-            level_object wall = new level_object();
-            wall.type = "test";
-            level_data.level_object_list.Add(wall);
-            string json_string = JsonSerializer.Serialize(level_data, new JsonSerializerOptions { WriteIndented = true });
-
-            File.WriteAllText(current_level_file, json_string);
-
-            Debug.WriteLine("Saved level : " + current_level_file);
-        }
-
-        public class level_data
-        {
-            public string name { get; set; }
-            public List<level_object> level_object_list { get; set; } = new List<level_object>();
-        }
-        public class level_object
-        {
-            public string type { get; set; }
-            public List<int> data { get; set; } = new List<int> { 3, 2, 1, };
         }
     }
     

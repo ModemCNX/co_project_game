@@ -55,12 +55,12 @@ namespace old_heart
             }
 
             
-            KeyboardStateExtended keyboard_state = global.input.keyboard_state;
-            if (keyboard_state.WasKeyPressed(Keys.E)) //camera shake Test
-            {
-                //Debug.WriteLine("Shaked");
-                shake_screen(0.5f);
-            }
+            //KeyboardStateExtended keyboard_state = global.input.keyboard_state;
+            //if (keyboard_state.WasKeyPressed(Keys.E)) //camera shake Test
+            //{
+            //    //Debug.WriteLine("Shaked");
+            //    shake_screen(0.5f);
+            //}
         }
     }
 }

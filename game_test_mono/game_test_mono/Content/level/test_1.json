@@ -1,13 +1,23 @@
 {
-  "name": "test",
+  "name": "test_1.json",
   "level_object_list": [
     {
-      "type": "test",
-      "data": [
-        3,
-        2,
-        1
-      ]
+      "type": "wall_collision_rectangle",
+      "position_x": 50,
+      "position_y": 10,
+      "data": {
+        "size_x": "64",
+        "size_y": "500"
+      }
+    },
+    {
+      "type": "wall_collision_rectangle",
+      "position_x": 20,
+      "position_y": 50,
+      "data": {
+        "size_x": "500",
+        "size_y": "64"
+      }
     }
   ]
 }

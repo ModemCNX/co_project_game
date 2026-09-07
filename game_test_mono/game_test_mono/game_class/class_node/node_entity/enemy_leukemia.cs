@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace old_heart
 {
-    public class leukemia : enemy
+    public class enemy_leukemia : enemy
     {
-        public leukemia(ContentManager content_set, int max_hp, Vector2 position, float speed)
+        public enemy_leukemia(ContentManager content_set, int max_hp, Vector2 position, float speed)
             : base(content_set, max_hp, position, speed)
         {
             animation_player = new animation_player_leukemia(content_set);
