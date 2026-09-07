@@ -31,7 +31,7 @@ namespace old_heart
         public particle_manager(ContentManager content)
         {
             this.content = content;
-            default_particle_texture = content.Load<Texture2D>("image/white_pixel");
+            default_particle_texture = content.Load<Texture2D>("assets/image/other/white_pixel");
             low_particle_effect = new ParticleEffect("low_particle_effect")
             {
                 Position = new Vector2(0, 0),
