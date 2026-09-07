@@ -24,7 +24,7 @@ namespace old_heart
         {
             base.LoadContent();
 
-            font = Content.Load<SpriteFont>("font/test_font");
+            font = Content.Load<SpriteFont>("assets/font/test_font");
 
             test_text = new ui_text("this text get replace in update function anyway", font, new Vector2(10, 5));
             test_text.text_color = Color.DarkRed;
