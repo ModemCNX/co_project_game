@@ -2,6 +2,12 @@
   "name": "test_1.json",
   "level_object_list": [
     {
+      "type": "player",
+      "position_x": 254,
+      "position_y": 108,
+      "data": {}
+    },
+    {
       "type": "wall_collision_rectangle",
       "position_x": 50,
       "position_y": 10,
@@ -24,7 +30,7 @@
       "position_x": 67,
       "position_y": 67,
       "data": {
-        "texture": "Placeholder/Weapons/Head",
+        "texture": "Placeholder/Player/Idle",
         "high": "True"
       }
     }

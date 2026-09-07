@@ -32,7 +32,7 @@ namespace old_heart
         }
         public void update(GameTime gameTime ,player player)
         {
-            global.input.update_scaled_mouse(viewport_adapter, camera); // update mouse position base on viewport scale
+            update_global_mouse_position();
 
             if (player != null)
             {
@@ -61,6 +61,11 @@ namespace old_heart
             //    //Debug.WriteLine("Shaked");
             //    shake_screen(0.5f);
             //}
+        }
+
+        public void update_global_mouse_position()
+        {
+            global.input.update_scaled_mouse(viewport_adapter, camera); // update mouse position base on viewport scale
         }
     }
 }

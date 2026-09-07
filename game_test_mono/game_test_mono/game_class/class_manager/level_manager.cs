@@ -35,7 +35,7 @@ namespace old_heart
             string level_folder = Path.Combine(game_root_file, "Content", "level");
             current_level_file = Path.Combine(level_folder, level_file);
 
-            //load_level();
+            load_level();
         }
         public void clear_level()  //not true clear all  (still have collision in collision world)            use for level editor only
         {

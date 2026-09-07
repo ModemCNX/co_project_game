@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Screens;
+using System.IO;
 
 namespace old_heart
 {
@@ -33,7 +34,6 @@ namespace old_heart
             game_manager.add_ui(test_text_2);
 
             game_manager.level_manager.set_level_file("test_1.json");
-            game_manager.level_manager.load_level();
         }
         public override void Update(GameTime gameTime)
         {
@@ -48,13 +48,14 @@ namespace old_heart
 
 
             test_text.text_string = $"test_level scene fps [{(1/ gameTime.ElapsedGameTime.TotalSeconds):F2}]" +
+            $"\ncurrent_level_file : {Path.GetFileName(game_manager.level_manager.current_level_file)}" +
             $"\nmouse_pos : {global.input.scaled_mouse_position}\nworld_mouse_pos : {global.input.scaled_mouse_world_position}";
 
             if (game_manager.player != null)
             {
                 test_text.text_string += $"\nplayer acc : {game_manager.player.acceleration}\nvelocity : {game_manager.player.velocity.X:F2} , {game_manager.player.velocity.Y:F2}" +
-                    $"\nw speed : {game_manager.player.velocity.Length():F2} \nposition : {game_manager.player.position.X:F2} , {game_manager.player.position.Y:F2}" +
-                    $"\nplayer animation : {game_manager.player.animation_player.current_animation.name} [{game_manager.player.animation_player.current_frame_index}]";
+                $"\nw speed : {game_manager.player.velocity.Length():F2} \nposition : {game_manager.player.position.X:F2} , {game_manager.player.position.Y:F2}" +
+                $"\nplayer animation : {game_manager.player.animation_player.current_animation.name} [{game_manager.player.animation_player.current_frame_index}]";
             }
 
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -58,29 +57,33 @@ namespace old_heart
         }
         public override void Update(GameTime gameTime)
         {
-            if (global.input.keyboard_state.WasKeyPressed(Keys.V))
+            KeyboardStateExtended keyboard_state = global.input.keyboard_state;
+            if (keyboard_state.WasKeyPressed(Keys.V))
             {
                 ScreenManager.ReplaceScreen(new main_menu(game_ref), fade_transition);
-            }else if (global.input.keyboard_state.WasKeyPressed(Keys.B))
+            }else if (keyboard_state.WasKeyPressed(Keys.B))
             {
                 ScreenManager.ReplaceScreen(new test_level(game_ref), fade_transition);
             }
-            else if (global.input.keyboard_state.WasKeyPressed(Keys.K))
+            else if (keyboard_state.WasKeyPressed(Keys.K))
             {
                 game_manager.level_manager.save_level();
             }
-            else if (global.input.keyboard_state.WasKeyPressed(Keys.L))
+            else if (keyboard_state.WasKeyPressed(Keys.L))
             {
                 game_manager.level_manager.load_level();
+            }else if (keyboard_state.WasKeyPressed(Keys.D1))
+            {
+                game_manager.add_entity(new player(game_manager.content, global.input.scaled_mouse_world_position));
             }
 
-            move_camera(gameTime);
 
+            move_camera(gameTime);
 
             test_text.text_string = $"level_editor scene fps [{(1/ gameTime.ElapsedGameTime.TotalSeconds):F2}]" +
             $"\ncurrent_level_file : {Path.GetFileName(game_manager.level_manager.current_level_file)}" +
             $"\nworld_mouse_pos : {global.input.scaled_mouse_world_position}" +
-            $"\nobject count bellow\nentity :{game_manager.entity_manager.entity_list.Count}\nwall collision :{game_manager.collision_manager.wall_list.Count}] \nmap_low :{game_manager.map_manager.map_node_list.Count} \nmap_high :{game_manager.map_manager.high_map_node_list.Count}";
+            $"\nobject count bellow\nentity :{game_manager.entity_manager.entity_list.Count}\nwall collision :{game_manager.collision_manager.wall_list.Count} \nmap_low :{game_manager.map_manager.map_node_list.Count} \nmap_high :{game_manager.map_manager.high_map_node_list.Count}";
 
 
             update_all(gameTime);
@@ -121,6 +124,11 @@ namespace old_heart
                 camera_position += input_direction * delta_time;
                 game_manager.camera_manager.camera.LookAt(camera_position.ToPoint().ToVector2());
             }
+
+        }
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
         }
     }
     

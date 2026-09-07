@@ -102,13 +102,17 @@ namespace old_heart
         public void update(GameTime gameTime)
         {
             ui_manager.update(gameTime);
-            camera_manager.update(gameTime, player);
             debug_manager.update(gameTime);
 
-            if (pause) return;
+            if (pause)
+            {
+                camera_manager.update_global_mouse_position();
+                return;
+            }
 
             //map_manager.update(gameTime);  map don't update lol
             entity_manager.update(gameTime);
+            camera_manager.update(gameTime, player);
             particle_manager.update(gameTime);
             projectile_manager.update(gameTime);
             collision_manager.update(gameTime);
