@@ -23,6 +23,15 @@ namespace old_heart
         private float attack_timer = 0f;
         public float melee_lunge_speed = 150f;
 
+        // --- combat: melee combo ---
+        public int combo_count = 0;
+        public int max_combo = 4;
+        public float combo_reset_window = 1f;   // เว้นช่วงกดเกินเท่านี้ = คอมโบหลุด
+        private float combo_reset_timer = 0f;
+        public float combo_cooldown_duration = 2f; // คูลดาวน์หลังคอมโบครบ 4
+        public bool is_on_melee_cooldown = false;
+        private float melee_cooldown_timer = 0f;
+
         // --- combat: head throw ---
         public bool has_head = true;
         public float head_throw_speed = 1200f;
@@ -60,6 +69,24 @@ namespace old_heart
 
             MouseStateExtended mouse_state = global.input.mouse_state; // TODO: เช็คว่าชื่อ property ตรงกับของจริงในโปรเจกต์ไหม
 
+            // --- combo cooldown countdown ---
+            if (is_on_melee_cooldown)
+            {
+                melee_cooldown_timer -= delta_time;
+                if (melee_cooldown_timer <= 0f)
+                {
+                    is_on_melee_cooldown = false;
+                }
+            }
+            // --- combo reset countdown (เฉพาะตอนไม่ได้ cooldown อยู่) ---
+            else if (combo_count > 0)
+            {
+                combo_reset_timer -= delta_time;
+                if (combo_reset_timer <= 0f)
+                {
+                    combo_count = 0; // เว้นช่วงนานเกินไป คอมโบหลุดกลับไปนับ 1 ใหม่
+                }
+            }
             // --- attack timer countdown ---
             if (is_attacking)
             {
@@ -167,7 +194,7 @@ namespace old_heart
                 {
                     throw_head();
                 }
-                else if (is_attacking == false)
+                else if (is_attacking == false && is_on_melee_cooldown == false)
                 {
                     start_attack();
                 }
@@ -191,6 +218,10 @@ namespace old_heart
         {
             is_attacking = true;
             attack_timer = attack_duration;
+
+            combo_count++;
+            combo_reset_timer = combo_reset_window;
+
             velocity = Vector2.Zero; // หยุดนิ่งทันทีตอนเริ่มโจมตี
 
             Vector2 to_cursor = global.input.scaled_mouse_world_position - position;
@@ -203,6 +234,12 @@ namespace old_heart
             melee_projectile punch = new melee_projectile(content, position, aim_direction, melee_range, melee_hitbox_lifetime, melee_damage);
             punch.owner = this;
             global.signal.spawn_projectile(punch);
+            if (combo_count >= max_combo)
+            {
+                is_on_melee_cooldown = true;
+                melee_cooldown_timer = combo_cooldown_duration;
+                combo_count = 0; // เริ่มคอมโบใหม่ตั้งแต่ตอนนี้ ระหว่างนี้ cooldown จะบล็อกการโจมตีอยู่แล้ว
+            }
         }
 
         private direction get_cardinal_direction(Vector2 v)
