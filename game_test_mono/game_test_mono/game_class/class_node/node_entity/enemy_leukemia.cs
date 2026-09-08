@@ -6,8 +6,7 @@ namespace old_heart
 {
     public class enemy_leukemia : enemy
     {
-        public enemy_leukemia(ContentManager content_set, int max_hp, Vector2 position, float speed)
-            : base(content_set, max_hp, position, speed)
+        public enemy_leukemia(ContentManager content_set, Vector2 position) : base(content_set, 5, position, 600)
         {
             animation_player = new animation_player_leukemia(content_set);
         }

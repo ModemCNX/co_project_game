@@ -43,17 +43,11 @@ namespace old_heart
             test_text_2.text_scale = new Vector2(0.5f, 0.5f);
             game_manager.add_ui(test_text_2);
 
-            test_text_3 = new ui_text("current_state = none", font, new Vector2(10, 490));
+            test_text_3 = new ui_text("current_state = none (not finidsh)", font, new Vector2(10, 490));
             test_text_3.text_color = Color.DarkRed;
             test_text_3.text_scale = new Vector2(0.5f, 0.5f);
             game_manager.add_ui(test_text_3);
 
-            collision_shape_box wall = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(50f, 10f), new Vector2(64f, 500f)));
-            game_manager.add_map_collision(wall);
-            collision_shape_box wall2 = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(20f, 50f), new Vector2(500f, 64f)));
-            game_manager.add_map_collision(wall2);
-            image test_image = new image(Content, new Vector2(67, 67), "Placeholder/Weapons/Head");
-            game_manager.add_map(test_image,true);
         }
         public override void Update(GameTime gameTime)
         {

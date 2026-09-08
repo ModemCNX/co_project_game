@@ -31,7 +31,6 @@ namespace old_heart
         // --- clone ---
         public float clone_timer = 15f; // TODO: ปรับค่าตามความยากง่ายที่ต้องการ
         private float clone_timer_current;
-        public event Action<enemy> on_request_clone; // scene/spawner ต้อง subscribe เพื่อ instantiate enemy ตัวใหม่จริงๆ
 
         // --- frightened ---
         public float frightened_speed_multiplier = 2f;
@@ -44,8 +43,7 @@ namespace old_heart
         private int patrol_index = 0;
         private const float patrol_point_threshold = 8f;
 
-        public enemy(ContentManager content_set, int max_hp, Vector2 position, float speed)
-            : base(content_set, max_hp, position, speed)
+        public enemy(ContentManager content_set, int max_hp, Vector2 position, float speed) : base(content_set, max_hp, position, speed)
         {
             patrol_origin = position;
             clone_timer_current = clone_timer;
@@ -207,7 +205,7 @@ namespace old_heart
             if (clone_timer_current <= 0f)
             {
                 clone_timer_current = clone_timer;
-                on_request_clone?.Invoke(this); // scene/spawner จะ subscribe event นี้เพื่อสร้าง enemy ตัวใหม่จริงๆ
+                global.signal.spawn_entity(new enemy_leukemia(content, position + new Vector2(100,0)));
             }
         }
 

@@ -122,6 +122,7 @@ namespace old_heart
 
             foreach(level_object level_object in level_data_in_file.level_object_list)
             {
+                Debug.WriteLine("Loading : " + level_object.type);
                 if (level_object.type == "player")
                 {
                     float position_x = level_object.position_x;
@@ -129,9 +130,15 @@ namespace old_heart
 
                     game_manager.add_entity(new player(game_manager.content,new Vector2(position_x,position_y)));
                 }
+                else if(level_object.type == "enemy_leukemia")
+                {
+                    float position_x = level_object.position_x;
+                    float position_y = level_object.position_y;
+
+                    game_manager.add_entity(new enemy_leukemia(game_manager.content, new Vector2(position_x, position_y)));
+                }
                 else if (level_object.type == "wall_collision_rectangle")
                 {
-                    Debug.WriteLine("Load  : " + level_object.type);
                     float position_x = level_object.position_x;
                     float position_y = level_object.position_y;
                     float size_x = 0;
@@ -140,11 +147,10 @@ namespace old_heart
                     float.TryParse(level_object.data["size_x"], out size_x);
                     float.TryParse(level_object.data["size_y"], out size_y);
 
-                    game_manager.add_map_collision(new collision_shape_box((BoundingBox2D.CreateFromPositionAndSize(new Vector2(position_x, position_y) , new Vector2(size_x,size_y) ))));
+                    game_manager.add_map_collision(new collision_shape_box((BoundingBox2D.CreateFromPositionAndSize(new Vector2(position_x, position_y), new Vector2(size_x, size_y)))));
                 }
                 else if (level_object.type == "image")
                 {
-                    Debug.WriteLine("Load  : " + level_object.type);
                     float position_x = level_object.position_x;
                     float position_y = level_object.position_y;
                     string file_path = level_object.data["texture"];

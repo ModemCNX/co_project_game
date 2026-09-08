@@ -44,7 +44,7 @@ namespace old_heart
             collision_shape_box wall2 = new collision_shape_box(BoundingBox2D.CreateFromPositionAndSize(new Vector2(100f, 500f), new Vector2(500f, 64f)));
             game_manager.add_map_collision(wall2);
 
-            test_enemy = new enemy_leukemia(Content, max_hp: 5, position: new Vector2(400, 300), speed: 600f); // ใช้ Content (ตัวใหญ่) ไม่ใช่ content
+            test_enemy = new enemy_leukemia(Content, position: new Vector2(400, 300)); // ใช้ Content (ตัวใหญ่) ไม่ใช่ content
             
             game_manager.add_entity(test_enemy);
            
