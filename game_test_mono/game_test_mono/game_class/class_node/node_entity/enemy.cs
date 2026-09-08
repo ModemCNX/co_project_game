@@ -205,7 +205,7 @@ namespace old_heart
             if (clone_timer_current <= 0f)
             {
                 clone_timer_current = clone_timer;
-                global.signal.spawn_entity(new enemy_leukemia(content, position + new Vector2(100,0)));
+                //global.signal.spawn_entity(new enemy_leukemia(content, position + new Vector2(100,0)));     // dont work need fix 
             }
         }
 
